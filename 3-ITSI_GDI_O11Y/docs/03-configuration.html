@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>3. Configuration | ITSI Workshop</title>
+  <link rel="stylesheet" href="../../assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <div class="site-title"><a href="../../README.html">ITSI Workshop for O11y SAs</a></div>
+      <div class="site-subtitle">Splunk ITSI Workshop Documentation</div>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar"><section class="nav-section"><h3 class="nav-section-title">Navigation</h3><ul class="nav-list">
+<li><a href="../../README.html">Workshop Overview</a></li>
+<li><a href="../../1-ITSI_GDI_AppDynamics/README.html">GDI AppDynamics</a></li>
+<li><a href="../../2-ITSI_GDI_ThousandEyes/README.html">GDI ThousandEyes</a></li>
+<li><a class="active" href="../README.html">GDI O11y</a></li>
+<li><a href="../../4-ITSI_CONTENT_PACK_INSTALL_CONFIGURE/README.html">Content Packs</a></li>
+<li><a href="../../5-ITSI_SERVICE_KPI/README.html">Services</a></li>
+<li><a href="../../6-ITSI_NOTABLE_EVENTS/README.html">Episodes</a></li>
+</ul></section></aside>
+    <main class="main">
+      <div class="breadcrumb">3-ITSI_GDI_O11Y / docs</div>
+      <header class="doc-header">
+        <h1 class="doc-title">3. Configuration</h1>
+        <div class="doc-meta">1 minute read • Source: 3-ITSI_GDI_O11Y/docs/03-configuration.md</div>
+      </header>
+      <article class="content"><h1 id="3-configuration">3. Configuration</h1>
+<h2 id="overview">Overview</h2>
+<p>After installing the add-on, you need to configure the connection to your <strong>Splunk Observability Cloud</strong> organization.</p>
+<hr />
+<h2 id="steps">Steps</h2>
+<h3 id="1-open-the-add-on">1. Open the Add-on</h3>
+<p>Navigate to:</p>
+<pre><code>Apps &gt; Splunk Infrastructure Monitoring Add-on &gt; Configuration
+</code></pre>
+<h3 id="2-connect-your-account">2. Connect Your Account</h3>
+<p>Click <strong>Connect Account</strong>.</p>
+<p><img alt="Connect Account screen" src="../img/image2.png" /></p>
+<blockquote>
+<blockquote>
+<p>Access Token = API Token in o11y</p>
+</blockquote>
+</blockquote>
+<h3 id="3-verify-the-connection">3. Verify the Connection</h3>
+<p>Ensure the connection is set to <strong>default</strong> and is <strong>enabled</strong>.</p>
+<p><img alt="Connection status showing default enabled" src="../img/image3.png" /></p>
+<hr />
+<h2 id="important-note-for-this-lab">⚠️ Important Note for This Lab</h2>
+<blockquote>
+<p>Make sure to save your <strong>Organization ID</strong> — you will need it when configuring the data stream inputs in the next step</p>
+<p>This lab uses <strong>Observability Workshop AMER</strong>.</p>
+</blockquote>
+<hr />
+<h2 id="reference">Reference</h2>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Connection name</td>
+<td><code>default</code></td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Enabled</td>
+</tr>
+<tr>
+<td>Organization ID</td>
+<td><em>(save from your Splunk Show environment)</em></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><a href="02-installation.html">← Installation</a> | <a href="04-inputs.html">Next: Inputs Setup →</a></p></article>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ITSI Alerts &amp; Episodes Configuration Guide | ITSI Workshop</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <div class="site-title"><a href="../README.html">ITSI Workshop for O11y SAs</a></div>
+      <div class="site-subtitle">Splunk ITSI Workshop Documentation</div>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar"><section class="nav-section"><h3 class="nav-section-title">Navigation</h3><ul class="nav-list">
+<li><a href="../README.html">Workshop Overview</a></li>
+<li><a href="../1-ITSI_GDI_AppDynamics/README.html">GDI AppDynamics</a></li>
+<li><a href="../2-ITSI_GDI_ThousandEyes/README.html">GDI ThousandEyes</a></li>
+<li><a href="../3-ITSI_GDI_O11Y/README.html">GDI O11y</a></li>
+<li><a href="../4-ITSI_CONTENT_PACK_INSTALL_CONFIGURE/README.html">Content Packs</a></li>
+<li><a href="../5-ITSI_SERVICE_KPI/README.html">Services</a></li>
+<li><a class="active" href="README.html">Episodes</a></li>
+</ul></section></aside>
+    <main class="main">
+      <div class="breadcrumb">6-ITSI_NOTABLE_EVENTS</div>
+      <header class="doc-header">
+        <h1 class="doc-title">ITSI Alerts &amp; Episodes Configuration Guide</h1>
+        <div class="doc-meta">3 minute read • Source: 6-ITSI_NOTABLE_EVENTS/README.md</div>
+      </header>
+      <article class="content"><h1 id="itsi-alerts-episodes-configuration-guide">ITSI Alerts &amp; Episodes Configuration Guide</h1>
+<blockquote>
+<p><strong>Splunk IT Service Intelligence (ITSI)</strong> — Step-by-step guide to configuring alerts and episodes from AppDynamics, ThousandEyes, and Splunk Observability Cloud.</p>
+</blockquote>
+<hr />
+<h2 id="overview">Overview</h2>
+<p>This guide covers the final phase of the lab: configuring <strong>Alerts and Episodes</strong> for each of the data sources in your environment. By the end, ITSI will be ingesting and correlating alert data from three platforms:</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Ingestion Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AppDynamics</td>
+<td>Correlation Search (index-based)</td>
+</tr>
+<tr>
+<td>ThousandEyes</td>
+<td>Content Pack Correlation Search</td>
+</tr>
+<tr>
+<td>Splunk Observability Cloud</td>
+<td>Webhook → HEC → Correlation Search</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#appdynamics">AppDynamics</a></li>
+<li><a href="#thousandeyes">ThousandEyes</a></li>
+<li><a href="#splunk-observability-cloud">Splunk Observability Cloud</a></li>
+</ul>
+<hr />
+<h2 id="appdynamics">AppDynamics</h2>
+<p>Alert ingestion for AppDynamics was already configured alongside the metrics ingestion from the Technology Add-on (TA).</p>
+<h3 id="step-1-validate-alert-ingestion">Step 1 — Validate Alert Ingestion</h3>
+<p>First, confirm that events are arriving in Splunk by running the following search:</p>
+<pre><code class="language-spl">index=&quot;appdynamics&quot; source=appdynamics_events
+</code></pre>
+<h3 id="step-2-create-a-correlation-search">Step 2 — Create a Correlation Search</h3>
+<p>In ITSI, navigate to:</p>
+<pre><code>Configuration &gt; Event Management &gt; Correlation Searches &gt; Create New Search &gt; Create Correlation Search
+</code></pre>
+<p><strong>Name the search</strong></p>
+<p>AppDynamics Events Custom Search</p>
+<p><strong>Search query to use:</strong></p>
+<pre><code class="language-spl">index=appdynamics source=appdynamics_events severity!=null
+</code></pre>
+<p>Associate the correlation search with your AppDynamics services:</p>
+<p><img alt="AppDynamics Correlation Search — Service Association" src="img/image1.png" /></p>
+<p><img alt="AppDynamics Correlation Search — Configuration" src="img/image2.png" /></p>
+<p>Click <strong>Save</strong>.</p>
+<hr />
+<h2 id="thousandeyes">ThousandEyes</h2>
+<p>Alert ingestion for ThousandEyes was already configured alongside the metrics ingestion.</p>
+<p>Unlike AppDynamics, for ThousandEyes we will <strong>use the correlation search that was pre-installed by the content pack</strong> rather than creating one from scratch.</p>
+<h3 id="step-1-locate-the-integration">Step 1 — Locate the Integration</h3>
+<p>In ITSI, navigate to:</p>
+<pre><code>Configuration &gt; Data Integrations &gt; Deployed Integrations
+</code></pre>
+<p>Select <strong>Cisco ThousandEyes</strong> and edit the <strong><code>thousandeyes_default</code></strong> entry.</p>
+<h3 id="step-2-update-the-search">Step 2 — Update the Search</h3>
+<p>Replace the existing search with the following:</p>
+<pre><code class="language-spl">index=te_index sourcetype=&quot;cisco:thousandeyes:alerts&quot;
+</code></pre>
+<p>Lookback <strong>Last 4 hours</strong></p>
+<p>Click <strong>Validate</strong></p>
+<p>Keep all other fields as shown in the screenshots below:</p>
+<p><img alt="ThousandEyes Correlation Search — Part 1" src="img/image3.png" /></p>
+<p><img alt="ThousandEyes Correlation Search — Part 2" src="img/image4.png" /></p>
+<p><img alt="ThousandEyes Correlation Search — Part 3" src="img/image5.png" /></p>
+<h3 id="step-3-save-and-activate">Step 3 — Save and Activate</h3>
+<p>Click <strong>Save</strong> and <strong>Activate</strong> the integration.</p>
+<hr />
+<h2 id="splunk-observability-cloud">Splunk Observability Cloud</h2>
+<h3 id="step-1-activate-the-itsi-correlation-search">Step 1 — Activate the ITSI Correlation Search</h3>
+<p>Back in <strong>ITSI</strong>, navigate to:</p>
+<pre><code>Configuration &gt; Data Integrations &gt; Deployed Integrations &gt; Splunk Observability Cloud
+</code></pre>
+<p>Edit the <strong><code>o11y_default</code></strong> entry and set the search to:</p>
+<pre><code class="language-spl">index=o11y_alerts
+</code></pre>
+<p>Lookback <strong>Last 4 hours</strong></p>
+<p>Click <strong>Validate</strong></p>
+<p>Keep all other fields as shown in the screenshots below:</p>
+<p><img alt="O11y Alerts" src="img/o11y1.png" /></p>
+<p><img alt="O11y Alerts" src="img/o11y2.png" /></p>
+<p><img alt="O11y Alerts" src="img/o11y3.png" /></p>
+<p><img alt="O11y Alerts" src="img/o11y4.png" /></p>
+<p>Click <strong>Save</strong> and <strong>Activate</strong>.</p>
+<hr />
+<h2 id="summary">Summary</h2>
+<p>Once all three integrations are configured and active, ITSI will automatically correlate incoming alerts into episodes. The table below summarizes what was configured:</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Index</th>
+<th>Correlation Search</th>
+<th>Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AppDynamics</td>
+<td><code>appdynamics</code></td>
+<td>Created manually</td>
+<td>TA-based ingestion</td>
+</tr>
+<tr>
+<td>ThousandEyes</td>
+<td><code>te_index</code></td>
+<td>Pre-installed via content pack</td>
+<td>TA-based ingestion</td>
+</tr>
+<tr>
+<td>Splunk O11y</td>
+<td><code>o11y_alerts</code></td>
+<td>Pre-installed via content pack</td>
+<td>Webhook → HEC</td>
+</tr>
+</tbody>
+</table>
+<h2 id="validation">Validation</h2>
+<p>Now you should see some Episodes with events correlated in the <strong>Alerts and Episodes</strong> view.</p>
+<p>In ITSI, navigate to:</p>
+<pre><code>Alerts and Episodes
+</code></pre>
+<p><img alt="Alerts" src="img/alerts.png" /></p>
+<hr />
+<h2 id="troubleshooting">Troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th>Issue</th>
+<th>Resolution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No AppDynamics events in index</td>
+<td>Verify the TA is configured and the <code>appdynamics_events</code> source is active</td>
+</tr>
+<tr>
+<td>ThousandEyes search returns no results</td>
+<td>Confirm <code>te_index</code> exists and the sourcetype matches <code>cisco:thousandeyes:alerts</code></td>
+</tr>
+<tr>
+<td>O11y webhook not delivering events</td>
+<td>Check the HEC token is correct, the endpoint is reachable, and the detector is enabled</td>
+</tr>
+<tr>
+<td>Correlation search not creating episodes</td>
+<td>Verify the search is <strong>Activated</strong> and the time window settings are appropriate</td>
+</tr>
+</tbody>
+</table></article>
+    </main>
+  </div>
+</body>
+</html>

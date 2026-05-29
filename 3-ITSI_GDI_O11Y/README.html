@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ITSI + GDI + Splunk Observability Cloud | ITSI Workshop</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <div class="site-title"><a href="../README.html">ITSI Workshop for O11y SAs</a></div>
+      <div class="site-subtitle">Splunk ITSI Workshop Documentation</div>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar"><section class="nav-section"><h3 class="nav-section-title">Navigation</h3><ul class="nav-list">
+<li><a href="../README.html">Workshop Overview</a></li>
+<li><a href="../1-ITSI_GDI_AppDynamics/README.html">GDI AppDynamics</a></li>
+<li><a href="../2-ITSI_GDI_ThousandEyes/README.html">GDI ThousandEyes</a></li>
+<li><a class="active" href="README.html">GDI O11y</a></li>
+<li><a href="../4-ITSI_CONTENT_PACK_INSTALL_CONFIGURE/README.html">Content Packs</a></li>
+<li><a href="../5-ITSI_SERVICE_KPI/README.html">Services</a></li>
+<li><a href="../6-ITSI_NOTABLE_EVENTS/README.html">Episodes</a></li>
+</ul></section></aside>
+    <main class="main">
+      <div class="breadcrumb">3-ITSI_GDI_O11Y</div>
+      <header class="doc-header">
+        <h1 class="doc-title">ITSI + GDI + Splunk Observability Cloud</h1>
+        <div class="doc-meta">1 minute read • Source: 3-ITSI_GDI_O11Y/README.md</div>
+      </header>
+      <article class="content"><h1 id="itsi-gdi-splunk-observability-cloud">ITSI + GDI + Splunk Observability Cloud</h1>
+<h2 id="overview">Overview</h2>
+<p>This workshop explains how to ingest Observability Cloud (O11y) metrics into <strong>Splunk ITSI</strong> using the <strong>Splunk Infrastructure Monitoring (SIM) Add-on</strong> — the core bridge component between the two platforms.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="docs/01-architecture.html">1. Architecture</a></td>
+<td>Component overview and data flow</td>
+</tr>
+<tr>
+<td><a href="docs/02-installation.html">2. Installation</a></td>
+<td>Installing the SIM Add-on from Splunkbase</td>
+</tr>
+<tr>
+<td><a href="docs/03-configuration.html">3. Configuration</a></td>
+<td>Connecting to Splunk Observability Cloud</td>
+</tr>
+<tr>
+<td><a href="docs/04-inputs.html">4. Inputs Setup</a></td>
+<td>Configuring data stream inputs</td>
+</tr>
+<tr>
+<td><a href="docs/05-validation.html">5. Validation</a></td>
+<td>Verifying data ingestion</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="components-involved">Components Involved</h2>
+<ul>
+<li><strong>Splunk Infrastructure Monitoring (SIM) Add-on</strong></li>
+<li><strong>Splunk ITSI</strong> (IT Service Intelligence)</li>
+<li><strong>Splunk Observability Cloud (O11y)</strong></li>
+</ul>
+<hr />
+<h2 id="official-documentation">Official Documentation</h2>
+<ul>
+<li>📖 <a href="https://docs.splunk.com/Documentation/SIMAddon/latest/Install/Configure">SIM Add-on — Configure</a></li>
+<li>📖 <a href="https://docs.splunk.com/Documentation/SIMAddon/latest/Install/Commands">SIM Add-on — Commands Reference</a></li>
+</ul>
+<hr />
+<h2 id="quick-start">Quick Start</h2>
+<pre><code>1. Install the SIM Add-on → docs/02-installation.md
+2. Configure your O11y connection → docs/03-configuration.md
+3. Set up your data stream inputs → docs/04-inputs.md
+4. Validate data in sim_metrics index → docs/05-validation.md
+</code></pre>
+<hr />
+<blockquote>
+<p>💡 <strong>Tip:</strong> Use the <code>sim</code> command for ITSI KPIs whenever possible — it offers real-time performance without indexing overhead.</p>
+</blockquote>
+<p><a href="../2-ITSI_GDI_ThousandEyes/03-validation.html">Back</a> | <a href="docs/01-architecture.html">Next: GDI O11y - Architecture →</a></p></article>
+    </main>
+  </div>
+</body>
+</html>

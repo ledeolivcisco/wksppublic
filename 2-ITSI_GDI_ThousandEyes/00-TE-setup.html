@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Creating Page Load Test and Alert rule in ThousandEyes | ITSI Workshop</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <div class="site-title"><a href="../README.html">ITSI Workshop for O11y SAs</a></div>
+      <div class="site-subtitle">Splunk ITSI Workshop Documentation</div>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar"><section class="nav-section"><h3 class="nav-section-title">Navigation</h3><ul class="nav-list">
+<li><a href="../README.html">Workshop Overview</a></li>
+<li><a href="../1-ITSI_GDI_AppDynamics/README.html">GDI AppDynamics</a></li>
+<li><a class="active" href="README.html">GDI ThousandEyes</a></li>
+<li><a href="../3-ITSI_GDI_O11Y/README.html">GDI O11y</a></li>
+<li><a href="../4-ITSI_CONTENT_PACK_INSTALL_CONFIGURE/README.html">Content Packs</a></li>
+<li><a href="../5-ITSI_SERVICE_KPI/README.html">Services</a></li>
+<li><a href="../6-ITSI_NOTABLE_EVENTS/README.html">Episodes</a></li>
+</ul></section></aside>
+    <main class="main">
+      <div class="breadcrumb">2-ITSI_GDI_ThousandEyes</div>
+      <header class="doc-header">
+        <h1 class="doc-title">Creating Page Load Test and Alert rule in ThousandEyes</h1>
+        <div class="doc-meta">2 minute read • Source: 2-ITSI_GDI_ThousandEyes/00-TE-setup.md</div>
+      </header>
+      <article class="content"><h1 id="creating-page-load-test-and-alert-rule-in-thousandeyes">Creating Page Load Test and Alert rule in ThousandEyes</h1>
+<p>Before starting, you'll need data in ThousandEyes. </p>
+<p>If you still do not have a trial account, do so. <a href="https://www.thousandeyes.com/signup/">Thousand Eyes Trial</a></p>
+<p><em>Follow these steps to create a test and an alert rule using shell or curl commands. Using the UI to do this is not coverd here but feel free to do it if you find it quicker/easier.</em></p>
+<h2 id="step-0-create-your-api-token-and-get-your-account-group">Step 0 - Create your API Token and get your account group.</h2>
+<p>Top right -&gt; yourname -&gt; Profile</p>
+<p><img alt="Te Login" src="img/teLogin.png" /></p>
+<p>Take note of your Current Account Group</p>
+<p>In the <strong>User API Tokens</strong> click Create</p>
+<p>Save the API_TOKEN</p>
+<p>Now, you can run this <a href="scripts/create-page-load-and-alert.sh">shell script</a> shell script to do everything or go step by step like described below.</p>
+<h2 id="step-1-get-your-accountid-using-this-command">Step 1 - Get your accountId using this command</h2>
+<pre><code class="language-bash">curl -X GET &quot;https://api.thousandeyes.com/v7/account-groups&quot; \
+  -H &quot;Authorization: Bearer &lt;API_TOKEN&gt;&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+| jq -r '
+  [&quot;accountGroupName&quot;,&quot;aid&quot;,&quot;isCurrentAccountGroup&quot;],
+  (.accountGroups[] | [.accountGroupName, .aid, .isCurrentAccountGroup] )
+  | @csv
+' | grep &lt;your account group first 5 letters&gt;
+</code></pre>
+<p>Sample return.</p>
+<p>"yyy","xxxx",true</p>
+<p>The accountId is the second column. Save it to be used in the next step</p>
+<h2 id="step-2-create-a-new-page-load-test-using-your-account-id">Step 2 - create a new page load test using your account id</h2>
+<pre><code class="language-bash">curl -X POST &quot;https://api.thousandeyes.com/v7/tests/page-load?aid=&lt;accountId&gt;&quot; \
+  -H &quot;Authorization: Bearer &lt;API_TOKEN&gt;&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{
+    &quot;testName&quot;: &quot;online-boutique-us-ledeoliv&quot;,
+    &quot;url&quot;: &quot;https://online-boutique-us.splunko11y.com&quot;,
+    &quot;interval&quot;: 300,
+    &quot;agents&quot;: [
+      { &quot;agentId&quot;: &quot;4495&quot; }
+    ],
+    &quot;pageLoadTimeLimit&quot;: 10,
+    &quot;pageLoadTargetTime&quot;: 8,
+    &quot;httpVersion&quot;: 2,
+    &quot;authType&quot;: &quot;NONE&quot;,
+    &quot;alertsEnabled&quot;: true,
+    &quot;enabled&quot;: true
+  }'
+</code></pre>
+<p>Sample return.</p>
+<pre><code class="language-json">{&quot;interval&quot;:300,&quot;testId&quot;:&quot;xxxx&quot;,&quot;bgpMeasurements&quot;:true,&quot;usePublicBgp&quot;:true,&quot;httpInterval&quot;:300,&quot;liveShare&quot;:false,&quot;testName&quot;:&quot;online-boutique-us-ledeoliv&quot;,...
+</code></pre>
+<p>Get the testId to be used in the next step</p>
+<h2 id="step-3-create-a-new-alert-rule-associated-with-the-page-load-test">Step 3 - Create a new Alert rule associated with the Page Load Test</h2>
+<pre><code class="language-bash">curl -X POST &quot;https://api.thousandeyes.com/v7/alerts/rules?aid=&lt;accountId&gt;&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -H &quot;Authorization: Bearer &lt;API_TOKEN&gt;&quot; \
+  -d '{
+    &quot;ruleName&quot;: &quot;ledeoliv-page-load-alert-online-boutique&quot;,
+    &quot;description&quot;: &quot;Alert if page load total time exceeds 800 ms&quot;,
+    &quot;alertType&quot;: &quot;page-load&quot;,
+    &quot;alertGroupType&quot;: &quot;cloud-enterprise&quot;,
+    &quot;severity&quot;: &quot;major&quot;,
+    &quot;expression&quot;: &quot;((onLoadTime &gt;= 800 ms))&quot;,
+    &quot;minimumSources&quot;: 1,
+    &quot;roundsViolatingOutOf&quot;: 3,
+    &quot;roundsViolatingRequired&quot;: 3,
+    &quot;notifyOnClear&quot;: true,
+    &quot;testIds&quot;: [&quot;&lt;testId&gt;&quot;]
+  }'
+
+</code></pre>
+<p>Sample return</p>
+<pre><code class="language-json">{&quot;ruleName&quot;:&quot;ledeoliv-page-load-alert-online-boutique&quot;,&quot;expression&quot;:&quot;((onLoadTime &gt;= 800 ms))&quot;,
+</code></pre>
+<p><a href="README.html">Back</a> | <a href="../2-ITSI_GDI_ThousandEyes/01-installation.html">Next: GDI ThousandEyes - Installation →</a></p></article>
+    </main>
+  </div>
+</body>
+</html>

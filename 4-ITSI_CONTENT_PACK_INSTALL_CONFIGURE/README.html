@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ITSI Content Pack — Installation &amp; Configuration Guide | ITSI Workshop</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <div class="site-title"><a href="../README.html">ITSI Workshop for O11y SAs</a></div>
+      <div class="site-subtitle">Splunk ITSI Workshop Documentation</div>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar"><section class="nav-section"><h3 class="nav-section-title">Navigation</h3><ul class="nav-list">
+<li><a href="../README.html">Workshop Overview</a></li>
+<li><a href="../1-ITSI_GDI_AppDynamics/README.html">GDI AppDynamics</a></li>
+<li><a href="../2-ITSI_GDI_ThousandEyes/README.html">GDI ThousandEyes</a></li>
+<li><a href="../3-ITSI_GDI_O11Y/README.html">GDI O11y</a></li>
+<li><a class="active" href="README.html">Content Packs</a></li>
+<li><a href="../5-ITSI_SERVICE_KPI/README.html">Services</a></li>
+<li><a href="../6-ITSI_NOTABLE_EVENTS/README.html">Episodes</a></li>
+</ul></section></aside>
+    <main class="main">
+      <div class="breadcrumb">4-ITSI_CONTENT_PACK_INSTALL_CONFIGURE</div>
+      <header class="doc-header">
+        <h1 class="doc-title">ITSI Content Pack — Installation &amp; Configuration Guide</h1>
+        <div class="doc-meta">2 minute read • Source: 4-ITSI_CONTENT_PACK_INSTALL_CONFIGURE/README.md</div>
+      </header>
+      <article class="content"><h1 id="itsi-content-pack-installation-configuration-guide">ITSI Content Pack — Installation &amp; Configuration Guide</h1>
+<blockquote>
+<p><strong>An accelerator for Splunk IT Service Intelligence (ITSI) implementations using data from AppDynamics, Cisco ThousandEyes, and Splunk Observability Cloud.</strong></p>
+<p><strong>If you are using a pre-configured ITSI workshop machine you can skip this step. It should be previously installed</strong></p>
+</blockquote>
+<p><a href="docs/appdynamics.html">Next: Go to AppDynamics Content Pack Config →</a></p>
+<hr />
+<h2 id="table-of-contents">📋 Table of Contents</h2>
+<ul>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#installation-guide">Installation Guide</a></li>
+<li><a href="#data-source-configuration">Data Source Configuration</a></li>
+<li><a href="docs/appdynamics.html">AppDynamics</a></li>
+<li><a href="docs/thousandeyes.html">ThousandEyes</a></li>
+<li><a href="docs/observability.html">Splunk Observability Cloud (O11y)</a></li>
+</ul>
+<hr />
+<h2 id="overview">Overview</h2>
+<p>The <strong>Splunk App for Content Packs</strong> provides prepackaged content that accelerates the setup of your Splunk IT Service Intelligence (ITSI) or IT Essentials Work (ITE Work) environment. This content includes pre-configured KPI base searches, service templates, saved glass tables, entity discovery searches, and other objects ready for use inside ITSI.</p>
+<blockquote>
+<p>⚠️ <strong>Important:</strong> Treat this pack as an <strong>implementation accelerator</strong>, not a plug-and-play solution. We strongly recommend <strong>not</strong> simply installing and enabling everything at once — doing so can introduce serious performance issues or other undesirable behaviors in your environment. Follow the step-by-step instructions in this guide to selectively enable only the components relevant to your data sources.</p>
+</blockquote>
+<p>Once installed, the Splunk App for Content Packs becomes available under <strong>Configuration &gt; Data Integrations</strong> in the ITSI main menu. Navigate to the <strong>Content Library</strong> tab to browse and install individual content packs.</p>
+<p>📚 <strong>Official Splunk Documentation:</strong>
+- <a href="https://help.splunk.com/en/splunk-it-service-intelligence/content-packs-for-itsi/2.5/overview-of-the-splunk-app-for-content-packs">Overview of the Splunk App for Content Packs</a>
+- <a href="https://help.splunk.com/en/splunk-it-service-intelligence/content-packs-for-itsi/1.9/overview/install-the-splunk-app-for-content-packs">Install the Splunk App for Content Packs</a></p>
+<hr />
+<h2 id="prerequisites">Prerequisites</h2>
+<p>Before beginning, ensure the following:</p>
+<table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Splunk IT Service Intelligence (ITSI)</td>
+<td>4.9.x or later</td>
+</tr>
+<tr>
+<td>Splunk App for Content Packs</td>
+<td>2.3.0 or later</td>
+</tr>
+<tr>
+<td>Splunk Platform (Enterprise or Cloud)</td>
+<td>Compatible version per <a href="https://docs.splunk.com/Documentation/VersionCompatibility/current/matrix/CompatMatrix">matrix</a></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="installation-guide">Installation Guide</h2>
+<p>See the <a href="docs/install.html">full installation walkthrough →</a></p>
+<hr />
+<h2 id="data-source-configuration">Data Source Configuration</h2>
+<p>This guide covers the installation and configuration of content packs for the following data sources:</p>
+<table>
+<thead>
+<tr>
+<th>Data Source</th>
+<th>Content Pack</th>
+<th>Documentation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AppDynamics</td>
+<td>Content Pack for Splunk AppDynamics</td>
+<td><a href="docs/appdynamics.html">docs/appdynamics.md</a></td>
+</tr>
+<tr>
+<td>Cisco ThousandEyes</td>
+<td>Content Pack for Cisco ThousandEyes</td>
+<td><a href="docs/thousandeyes.html">docs/thousandeyes.md</a></td>
+</tr>
+<tr>
+<td>Splunk Observability Cloud</td>
+<td>Content Pack for Splunk Observability Cloud</td>
+<td><a href="docs/observability.html">docs/observability.md</a></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><a href="../3-ITSI_GDI_O11Y/README.html">Back</a> | <a href="docs/appdynamics.html">AppDynamics — Content Pack Configuration →</a></p></article>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>1. Architecture | ITSI Workshop</title>
+  <link rel="stylesheet" href="../../assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <div class="site-title"><a href="../../README.html">ITSI Workshop for O11y SAs</a></div>
+      <div class="site-subtitle">Splunk ITSI Workshop Documentation</div>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar"><section class="nav-section"><h3 class="nav-section-title">Navigation</h3><ul class="nav-list">
+<li><a href="../../README.html">Workshop Overview</a></li>
+<li><a href="../../1-ITSI_GDI_AppDynamics/README.html">GDI AppDynamics</a></li>
+<li><a href="../../2-ITSI_GDI_ThousandEyes/README.html">GDI ThousandEyes</a></li>
+<li><a class="active" href="../README.html">GDI O11y</a></li>
+<li><a href="../../4-ITSI_CONTENT_PACK_INSTALL_CONFIGURE/README.html">Content Packs</a></li>
+<li><a href="../../5-ITSI_SERVICE_KPI/README.html">Services</a></li>
+<li><a href="../../6-ITSI_NOTABLE_EVENTS/README.html">Episodes</a></li>
+</ul></section></aside>
+    <main class="main">
+      <div class="breadcrumb">3-ITSI_GDI_O11Y / docs</div>
+      <header class="doc-header">
+        <h1 class="doc-title">1. Architecture</h1>
+        <div class="doc-meta">1 minute read • Source: 3-ITSI_GDI_O11Y/docs/01-architecture.md</div>
+      </header>
+      <article class="content"><h1 id="1-architecture">1. Architecture</h1>
+<h2 id="overview">Overview</h2>
+<p>The <strong>Splunk Infrastructure Monitoring (SIM) Add-on</strong> is the core component that enables Observability Cloud (O11y) metrics to be consumed in Splunk ITSI.</p>
+<hr />
+<h2 id="operating-modes">Operating Modes</h2>
+<p>The add-on supports two distinct modes of operation:</p>
+<h3 id="sim-command-live-query-recommended-for-itsi-kpis">🔴 <code>sim</code> Command — Live Query (Recommended for ITSI KPIs)</h3>
+<p>Executes <strong>SignalFlow programs</strong> on O11y in real time.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Speed</td>
+<td>⚡ Lightning-fast</td>
+</tr>
+<tr>
+<td>Best for</td>
+<td>ITSI KPI base searches</td>
+</tr>
+<tr>
+<td>Index usage</td>
+<td>❌ No index duplication</td>
+</tr>
+<tr>
+<td>License impact</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<h3 id="modular-inputs-indexed-mode">🔵 Modular Inputs — Indexed Mode</h3>
+<p>Polls O11y periodically and stores metric summaries in the <code>sim_metrics</code> index.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Speed</td>
+<td>Periodic polling</td>
+</tr>
+<tr>
+<td>Best for</td>
+<td>Historical analysis, dashboard data</td>
+</tr>
+<tr>
+<td>Index</td>
+<td><code>sim_metrics</code></td>
+</tr>
+<tr>
+<td>License impact</td>
+<td>✅ Excluded from license charges when using <code>stash</code> sourcetype</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="architecture-diagram">Architecture Diagram</h2>
+<blockquote>
+<p><em>Architecture diagram to be added.</em></p>
+</blockquote>
+<hr />
+<h2 id="key-recommendation">Key Recommendation</h2>
+<blockquote>
+<p>📌 <strong>Use the <code>sim</code> command for ITSI KPIs whenever possible</strong> — it offers real-time performance without indexing overhead.</p>
+</blockquote>
+<hr />
+<p><a href="../README.html">← Home</a> | <a href="02-installation.html">Next: Installation →</a></p></article>
+    </main>
+  </div>
+</body>
+</html>

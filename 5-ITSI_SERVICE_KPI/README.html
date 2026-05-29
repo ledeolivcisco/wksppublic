@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ITSI Services &amp; KPI Configuration Guide | ITSI Workshop</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <div class="site-title"><a href="../README.html">ITSI Workshop for O11y SAs</a></div>
+      <div class="site-subtitle">Splunk ITSI Workshop Documentation</div>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar"><section class="nav-section"><h3 class="nav-section-title">Navigation</h3><ul class="nav-list">
+<li><a href="../README.html">Workshop Overview</a></li>
+<li><a href="../1-ITSI_GDI_AppDynamics/README.html">GDI AppDynamics</a></li>
+<li><a href="../2-ITSI_GDI_ThousandEyes/README.html">GDI ThousandEyes</a></li>
+<li><a href="../3-ITSI_GDI_O11Y/README.html">GDI O11y</a></li>
+<li><a href="../4-ITSI_CONTENT_PACK_INSTALL_CONFIGURE/README.html">Content Packs</a></li>
+<li><a class="active" href="README.html">Services</a></li>
+<li><a href="../6-ITSI_NOTABLE_EVENTS/README.html">Episodes</a></li>
+</ul></section></aside>
+    <main class="main">
+      <div class="breadcrumb">5-ITSI_SERVICE_KPI</div>
+      <header class="doc-header">
+        <h1 class="doc-title">ITSI Services &amp; KPI Configuration Guide</h1>
+        <div class="doc-meta">8 minute read • Source: 5-ITSI_SERVICE_KPI/README.md</div>
+      </header>
+      <article class="content"><h1 id="itsi-services-kpi-configuration-guide">ITSI Services &amp; KPI Configuration Guide</h1>
+<blockquote>
+<p><strong>Splunk IT Service Intelligence (ITSI)</strong> — Step-by-step guide to creating services and KPIs for observability across ThousandEyes, AppDynamics, and Splunk Observability Cloud.</p>
+</blockquote>
+<hr />
+<h2 id="overview">Overview</h2>
+<p>This guide walks you through creating ITSI services and their associated KPIs. The goal is to build a service hierarchy that provides a unified view of your environment, as shown below:</p>
+<p><img alt="ITSI Services Overview" src="img/svctree.png" /></p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#appdynamics-services">AppDynamics Services</a></li>
+<li><a href="#appd-ed-ecommerce-application">AppD-ED-Ecommerce-Application</a></li>
+<li><a href="#appd-ad-ecommerce-database">AppD-AD-Ecommerce-Database</a></li>
+<li><a href="#legacysystems-aggregation">LegacySystems (Aggregation)</a></li>
+<li><a href="#thousandeyes-services">ThousandEyes Services</a></li>
+<li><a href="#te-onlineboutique-web">TE-OnlineBoutique-Web</a></li>
+<li><a href="#te-onlineboutique-network">TE-OnlineBoutique-Network</a></li>
+<li><a href="#synthetic-onlineboutique-aggregation">Synthetic-OnLineBoutique (Aggregation)</a>  </li>
+<li><a href="#splunk-observability-cloud-services">Splunk Observability Cloud Services</a></li>
+<li><a href="#online-boutique--web">Online Boutique – Web</a></li>
+<li><a href="#online-boutique--hosts">Online Boutique – Hosts</a></li>
+<li><a href="#online-boutique--k8s">Online Boutique – K8s</a></li>
+<li><a href="#cloud-native-aggregation">Cloud-Native (Aggregation)</a></li>
+</ul>
+<hr />
+<h2 id="navigation">Navigation</h2>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Services Created</th>
+<th>Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#appdynamics-services">AppDynamics</a></td>
+<td>3 services</td>
+<td>Template + Manual</td>
+</tr>
+<tr>
+<td><a href="#thousandeyes-services">ThousandEyes</a></td>
+<td>3 services</td>
+<td>Template + Manual</td>
+</tr>
+<tr>
+<td><a href="#splunk-observability-cloud-services">Splunk O11y</a></td>
+<td>4 services</td>
+<td>Clone + Manual KPI</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="appdynamics-services">AppDynamics Services</h2>
+<h3 id="appd-ed-ecommerce-application">AppD-ED-Ecommerce-Application</h3>
+<p><strong>Navigation path:</strong></p>
+<pre><code>Apps &gt; IT Service Intelligence &gt; Configuration &gt; Service Monitoring &gt; Service and KPI Management
+</code></pre>
+<ol>
+<li>Click <strong>Create Service</strong></li>
+<li>Select <strong>Link Service Template</strong></li>
+<li>In the template dropdown, find: <strong><code>Splunk AppDynamics Application Template</code></strong></li>
+<li>Set the name to <strong><code>AppD-ED-Ecommerce-Application</code></strong></li>
+<li>Click <strong>Create</strong></li>
+</ol>
+<p><strong>KPI Configuration</strong> — Keep only the following KPIs:</p>
+<p><img alt="AppDynamics Application KPIs" src="img/image10.png" /></p>
+<p><strong>Entity Configuration:</strong></p>
+<p><img alt="AppDynamics Application Entities" src="img/image11.png" /></p>
+<blockquote>
+<p>⚠️ <strong>Important:</strong> Validate that the entities were successfully identified before saving.</p>
+</blockquote>
+<ol>
+<li><strong>Save</strong> and <strong>Enable</strong> the service.</li>
+</ol>
+<hr />
+<h3 id="appd-ad-ecommerce-database">AppD-AD-Ecommerce-Database</h3>
+<p><strong>Navigation path:</strong></p>
+<pre><code>Apps &gt; IT Service Intelligence &gt; Configuration &gt; Service Monitoring &gt; Service and KPI Management
+</code></pre>
+<ol>
+<li>Click <strong>Create Service</strong></li>
+<li>Select <strong>Link Service Template</strong></li>
+<li>In the template dropdown, find: <strong><code>Splunk AppDynamics Application Template</code></strong></li>
+<li>Set the name to <strong><code>AppD-AD-Ecommerce-Database</code></strong></li>
+<li>Click <strong>Create</strong></li>
+</ol>
+<p><strong>KPI Configuration</strong> — Keep only the following KPI:</p>
+<p><img alt="AppDynamics Database KPI" src="img/image12.png" /></p>
+<p><strong>Entity Rules Configuration:</strong></p>
+<p><img alt="AppDynamics Database Entity Rules" src="img/image13.png" /></p>
+<blockquote>
+<p>⚠️ <strong>Important:</strong> Validate that the entities were successfully identified before saving.</p>
+</blockquote>
+<ol>
+<li><strong>Save</strong> and <strong>Enable</strong> the service.</li>
+</ol>
+<hr />
+<h3 id="legacysystems-aggregation">LegacySystems (Aggregation)</h3>
+<p>This service aggregates the two AppDynamics services created above.</p>
+<p><strong>Navigation path:</strong></p>
+<pre><code>Apps &gt; IT Service Intelligence &gt; Configuration &gt; Service Monitoring &gt; Service and KPI Management
+</code></pre>
+<ol>
+<li>Click <strong>Create Service</strong></li>
+<li>Set the name to <strong><code>LegacySystems</code></strong></li>
+<li>Select <strong>Manually add service content</strong></li>
+<li>Click <strong>Create</strong></li>
+<li>Click <strong>Service Dependencies</strong> → <strong>Add Dependencies</strong></li>
+<li>Under <strong>Service Dependencies</strong>, select the previously created AppDynamics services</li>
+<li>For each, select their respective <strong><code>ServiceHealthScore</code></strong> KPIs</li>
+</ol>
+<p><img alt="LegacySystems service dependencies" src="img/image14.png" /></p>
+<ol>
+<li><strong>Save</strong> and <strong>Enable</strong> the service.</li>
+</ol>
+<blockquote>
+<p>⏳ Wait a few minutes. The services should then appear in the <strong>Service Analyzer</strong>.</p>
+</blockquote>
+<p><img alt="LegacySystems service dependencies" src="img/appdservices.png" /></p>
+<hr />
+<hr />
+<h2 id="thousandeyes-services">ThousandEyes Services</h2>
+<h3 id="te-onlineboutique-web">TE-OnlineBoutique-Web</h3>
+<p><strong>Navigation path:</strong></p>
+<pre><code>Apps &gt; IT Service Intelligence &gt; Configuration &gt; Service Monitoring &gt; Service and KPI Management
+</code></pre>
+<ol>
+<li>Click <strong>Create Service</strong></li>
+<li>Set the name to <strong><code>TE-OnlineBoutique-Web</code></strong></li>
+<li>Select <strong>Link Service Template</strong></li>
+<li>In the template dropdown, find: <strong><code>Cisco ThousandEyes Web Layer</code></strong></li>
+</ol>
+<p><img alt="ThousandEyes Web Layer template selection" src="img/image2.png" /></p>
+<ol>
+<li>Click <strong>Create</strong></li>
+</ol>
+<blockquote>
+<p><strong>Note:</strong> You are creating a service definition based on a template already imported by the content pack. This saves significant configuration time.</p>
+</blockquote>
+<p><strong>KPI Configuration</strong> — Keep only the following KPIs:</p>
+<p><img alt="ThousandEyes Web KPIs" src="img/image3.png" /></p>
+<p><strong>Entity Configuration</strong> — Verify the entity definition matches the figure below:</p>
+<p><img alt="ThousandEyes Web Entities" src="img/image4.png" /></p>
+<blockquote>
+<p>⚠️ <strong>Important:</strong> You must have at least one entity discovered under <strong>Matched Entities</strong>. If nothing appears, verify that <strong>Discovery Search</strong> is enabled and has run at least once.
+<strong>Also Important</strong> We are using <code>*</code> as the test ID justo to make it easier. In production you can use the correct test id or the test name</p>
+</blockquote>
+<ol>
+<li><strong>Save</strong> and <strong>Enable</strong> the service.</li>
+</ol>
+<hr />
+<h3 id="te-onlineboutique-network">TE-OnlineBoutique-Network</h3>
+<p><strong>Navigation path:</strong></p>
+<pre><code>Apps &gt; IT Service Intelligence &gt; Configuration &gt; Service Monitoring &gt; Service and KPI Management
+</code></pre>
+<ol>
+<li>Click <strong>Create Service</strong></li>
+<li>Set the name to <strong><code>TE-OnlineBoutique-Network</code></strong></li>
+<li>Select <strong>Link Service Template</strong></li>
+<li>In the template dropdown, find: <strong><code>Cisco ThousandEyes Network Layer</code></strong></li>
+</ol>
+<p><img alt="ThousandEyes Network Layer template selection" src="img/image5.png" /></p>
+<ol>
+<li>Click <strong>Create</strong></li>
+</ol>
+<p><strong>KPI Configuration</strong> — Keep only the following KPIs:</p>
+<p><img alt="ThousandEyes Network KPIs" src="img/image6.png" /></p>
+<p><strong>Entity Configuration:</strong></p>
+<p><img alt="ThousandEyes Network Entities" src="img/image7.png" /></p>
+<ol>
+<li><strong>Save</strong> and <strong>Enable</strong> the service.</li>
+</ol>
+<hr />
+<h3 id="synthetic-onlineboutique-aggregation">Synthetic-OnLineBoutique (Aggregation)</h3>
+<p>This service aggregates the two ThousandEyes services created above.</p>
+<p><strong>Navigation path:</strong></p>
+<pre><code>Apps &gt; IT Service Intelligence &gt; Configuration &gt; Service Monitoring &gt; Service and KPI Management
+</code></pre>
+<ol>
+<li>Click <strong>Create Service</strong></li>
+<li>Set the name to <strong><code>Synthetic-OnLineBoutique</code></strong></li>
+</ol>
+<p><img alt="Synthetic OnLineBoutique service" src="img/image8.png" /></p>
+<ol>
+<li>Select <strong>Manually add service content</strong></li>
+<li>Click <strong>Create</strong></li>
+<li>Click <strong>Service Dependencies</strong> → <strong>Add Dependencies</strong></li>
+</ol>
+<p><img alt="Service dependencies selection" src="img/image9.png" /></p>
+<ol>
+<li>Select the <strong>two previously created ThousandEyes services</strong></li>
+<li>For each service, mark <strong>only the <code>ServiceHealthScore</code></strong> KPI (as shown above)</li>
+<li><strong>Save</strong> and <strong>Enable</strong> the service.</li>
+</ol>
+<blockquote>
+<p>⏳ Wait a few minutes. The services should then appear in the <strong>Service Analyzer</strong>.</p>
+</blockquote>
+<p><img alt="Service dependencies selection" src="img/teservices.png" /></p>
+<hr />
+<h2 id="splunk-observability-cloud-services">Splunk Observability Cloud Services</h2>
+<h3 id="online-boutique-web">Online Boutique – Web</h3>
+<p>For this section, we use a <strong>clone strategy</strong> to save configuration time.</p>
+<p><strong>Navigation path:</strong></p>
+<pre><code>Apps &gt; IT Service Intelligence &gt; Configuration &gt; Service Monitoring &gt; Service and KPI Management
+</code></pre>
+<p>1 - Locate the service named <strong><code>Application Duration</code></strong> and click <strong>Clone</strong></p>
+<p><img alt="Clone o11y-Application Duration" src="img/image15.png" /></p>
+<p>2 - Rename the cloned service to <strong><code>Online Boutique - Web</code></strong> and click <strong>Clone</strong></p>
+<p><img alt="Rename to Online Boutique Web" src="img/image16.png" /></p>
+<p>3 - Locate the newly created service and click <strong>Edit</strong></p>
+<p><img alt="Edit Online Boutique Web" src="img/image17.png" /></p>
+<p>4 - Keep the KPI</p>
+<p><img alt="Edit Online Boutique Web" src="img/apmsvc2.png" /></p>
+<p>5 - Adjust the Entities</p>
+<p><img alt="Edit Online Boutique Web" src="img/apmsvc1.png" /></p>
+<p>6 - Save and enable</p>
+<hr />
+<h3 id="online-boutique-hosts">Online Boutique – Hosts</h3>
+<ol>
+<li>Clone the service <strong><code>o11yOS Hosts</code></strong></li>
+<li>Rename it to <strong><code>Online Boutique - Hosts</code></strong></li>
+<li>Delete existing KPIs, keeping only the following:</li>
+</ol>
+<p><img alt="Online Boutique Hosts KPIs" src="img/image18.png" /></p>
+<p><strong>Entity Configuration:</strong></p>
+<p><img alt="Online Boutique Hosts Entities" src="img/image19.png" /></p>
+<ol>
+<li><strong>Save</strong> and <strong>Enable</strong> the service.</li>
+</ol>
+<hr />
+<h3 id="online-boutique-k8s">Online Boutique – K8s</h3>
+<p>This service is created <strong>manually</strong> to demonstrate how to build a service with a custom Generic KPI from scratch.</p>
+<p><strong>Navigation path:</strong></p>
+<pre><code>Apps &gt; IT Service Intelligence &gt; Configuration &gt; Service Monitoring &gt; Service and KPI Management
+</code></pre>
+<ol>
+<li>Click <strong>Create Service</strong></li>
+<li>Select <strong>Manually add service content</strong></li>
+<li>Name it <strong>Online Boutique – K8s</strong> and click <strong>Create</strong></li>
+<li>In the <strong>KPI</strong> tab, click <strong>New → Generic KPI</strong></li>
+</ol>
+<p><img alt="New Generic KPI" src="img/image20.png" /></p>
+<p><strong>KPI Settings:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Title</td>
+<td><code>CPU POD</code></td>
+</tr>
+<tr>
+<td>Search Type</td>
+<td>Ad hoc Search</td>
+</tr>
+<tr>
+<td>Threshold Field</td>
+<td><code>_time</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ad hoc Search Query:</strong></p>
+<pre><code class="language-spl">| sim flow query=&quot;data('container_cpu_utilization',
+    filter=filter('k8s.pod.name', '*') and filter('k8s.cluster.name', '*'),
+    rollup='rate').promote('plugin-instance',
+    allow_missing=True).publish(label='cpuUtilization')&quot;
+| stats avg(_value) as cpuUtilization by k8s.pod.name k8s.cluster.name sf_organizationID _time sf_realm
+| eval SplunkInfraEntity = 'k8s.cluster.name' + &quot;-&quot; + 'k8s.pod.name' + &quot;-&quot; + sf_organizationID + &quot;-&quot; + sf_realm
+</code></pre>
+<p><img alt="KPI Threshold configuration" src="img/image21.png" /></p>
+<blockquote>
+<p><strong>Note:</strong> For this KPI, we will <strong>not</strong> split by entities.</p>
+</blockquote>
+<p><img alt="Entity split disabled" src="img/image22.png" /></p>
+<p><img alt="KPI final configuration" src="img/image23.png" /></p>
+<ol>
+<li>Click <strong>Finish</strong></li>
+</ol>
+<p>The completed service should look like this:</p>
+<p><img alt="Online Boutique K8s final view" src="img/image24.png" /></p>
+<ol>
+<li><strong>Save</strong> and <strong>Enable</strong> the service.</li>
+</ol>
+<hr />
+<h3 id="onlineboutique-cloud-native">OnlineBoutique Cloud-Native</h3>
+<p>This is the top-level aggregation service for all Splunk Observability Cloud services.</p>
+<p><strong>Navigation path:</strong></p>
+<pre><code>Apps &gt; IT Service Intelligence &gt; Configuration &gt; Service Monitoring &gt; Service and KPI Management
+</code></pre>
+<ol>
+<li>Click <strong>Create Service</strong></li>
+<li>Select <strong>Manually add service content</strong></li>
+<li>Name it <strong>OnlineBoutique Cloud-Native</strong></li>
+<li>Click <strong>Create</strong></li>
+<li>Go to <strong>Service Dependencies → Add Dependencies</strong></li>
+<li>Add the <strong>3 services</strong> created in this section:</li>
+<li><code>Online Boutique - Hosts</code></li>
+<li><code>Online Boutique - Web</code></li>
+<li><code>Online Boutique - k8s</code></li>
+</ol>
+<p><img alt="Online Boutique K8s final view" src="img/allsvc.png" /></p>
+<ol>
+<li>For each service, keep only the <strong><code>HealthScore</code></strong> as the KPI</li>
+<li><strong>Done</strong></li>
+<li><strong>Save</strong> and <strong>Enable</strong> the service.</li>
+</ol>
+<hr />
+<h3 id="online-boutique">Online Boutique</h3>
+<p>Now Let's create the last service (OnLine Boutique)</p>
+<p><strong>Navigation path:</strong></p>
+<pre><code>Apps &gt; IT Service Intelligence &gt; Configuration &gt; Service Monitoring &gt; Service and KPI Management
+</code></pre>
+<ol>
+<li>Click <strong>Create Service</strong></li>
+<li>Select <strong>Manually add service content</strong></li>
+<li>Name it <strong>OnLine Boutique</strong></li>
+<li>Click <strong>Create</strong></li>
+<li>Go to <strong>Service Dependencies → Add Dependencies</strong></li>
+<li>Add the <strong>3 services</strong> created in this section:</li>
+<li><code>Online Boutique - Cloud-Native</code></li>
+<li><code>LegacySystems</code></li>
+<li><code>Synthetic-OnLineBoutique</code></li>
+</ol>
+<p><img alt="Online Boutique K8s final view" src="img/allsvc2.png" /></p>
+<ol>
+<li>For each service, keep only the <strong><code>HealthScore</code></strong> as the KPI</li>
+<li><strong>Done</strong></li>
+<li><strong>Save</strong> and <strong>Enable</strong> the service.</li>
+</ol>
+<hr />
+<h2 id="service-analyzer">Service Analyzer</h2>
+<p>In the Service Analyzer the service tree</p>
+<p><strong>Navigation path:</strong></p>
+<pre><code>Apps &gt; IT Service Intelligence &gt; Service Analyzer
+</code></pre>
+<p><img alt="Service Analyzer Final" src="img/svctree.png" /></p>
+<p>Now navigate and explore the KPIs, entity views and the deep dives</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>In the next step we will create Notable Events and Episodes</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<hr />
+<h2 id="troubleshooting">Troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th>Issue</th>
+<th>Resolution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No matched entities found</td>
+<td>Verify that <strong>Discovery Search</strong> is enabled and has executed at least once</td>
+</tr>
+<tr>
+<td>Service not appearing in Service Analyzer</td>
+<td>Wait a few minutes after saving and enabling the service</td>
+</tr>
+<tr>
+<td>Template not found in dropdown</td>
+<td>Confirm the content pack was properly installed and imported</td>
+</tr>
+<tr>
+<td>KPI returning no data</td>
+<td>Validate the entity rules and confirm data is flowing into Splunk</td>
+</tr>
+</tbody>
+</table>
+<p>--</p>
+<p><a href="../4-ITSI_CONTENT_PACK_INSTALL_CONFIGURE/README.html">Back</a> | <a href="../6-ITSI_NOTABLE_EVENTS/README.html">Next: Notable Eventes - Episodes →</a></p></article>
+    </main>
+  </div>
+</body>
+</html>

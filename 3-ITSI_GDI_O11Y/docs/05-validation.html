@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>5. Validation | ITSI Workshop</title>
+  <link rel="stylesheet" href="../../assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <div class="site-title"><a href="../../README.html">ITSI Workshop for O11y SAs</a></div>
+      <div class="site-subtitle">Splunk ITSI Workshop Documentation</div>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar"><section class="nav-section"><h3 class="nav-section-title">Navigation</h3><ul class="nav-list">
+<li><a href="../../README.html">Workshop Overview</a></li>
+<li><a href="../../1-ITSI_GDI_AppDynamics/README.html">GDI AppDynamics</a></li>
+<li><a href="../../2-ITSI_GDI_ThousandEyes/README.html">GDI ThousandEyes</a></li>
+<li><a class="active" href="../README.html">GDI O11y</a></li>
+<li><a href="../../4-ITSI_CONTENT_PACK_INSTALL_CONFIGURE/README.html">Content Packs</a></li>
+<li><a href="../../5-ITSI_SERVICE_KPI/README.html">Services</a></li>
+<li><a href="../../6-ITSI_NOTABLE_EVENTS/README.html">Episodes</a></li>
+</ul></section></aside>
+    <main class="main">
+      <div class="breadcrumb">3-ITSI_GDI_O11Y / docs</div>
+      <header class="doc-header">
+        <h1 class="doc-title">5. Validation</h1>
+        <div class="doc-meta">3 minute read • Source: 3-ITSI_GDI_O11Y/docs/05-validation.md</div>
+      </header>
+      <article class="content"><h1 id="5-validation">5. Validation</h1>
+<h2 id="overview">Overview</h2>
+<p>Once the inputs are enabled, you can validate that data is flowing correctly into the <code>sim_metrics</code> index using the built-in dashboards provided by the add-on.</p>
+<hr />
+<h2 id="steps">Steps</h2>
+<h3 id="1-open-the-add-on-dashboards">1. Open the Add-on Dashboards</h3>
+<p>Navigate to:</p>
+<pre><code>Apps &gt; Splunk Infrastructure Monitoring Add-on &gt; Dashboards
+</code></pre>
+<p><img alt="Add-on Dashboards navigation" src="../img/image7.png" /></p>
+<h3 id="2-verify-data-ingestion">2. Verify Data Ingestion</h3>
+<p>Open the relevant dashboard and confirm that metrics are appearing as expected.</p>
+<p><img alt="Dashboard showing O11y metrics data flowing into sim_metrics" src="../img/image8.png" /></p>
+<p>You can also seach</p>
+<p>Query sim_metrics index</p>
+<pre><code class="language-spl">| mstats avg(&quot;cpu.utilization&quot;) as sa_cpu_utilization, sum(&quot;memory.free&quot;) as sa_memory_free, avg(&quot;disk_ops.read&quot;) as sa_disk_read, avg(&quot;disk_ops.write&quot;) as sa_disk_write, avg(&quot;if_octets.rx&quot;) as sa_network_receive, avg(&quot;if_octets.tx&quot;) as sa_network_send, avg(&quot;if_errors.tx&quot;) as sa_network_error_tx, avg(&quot;if_errors.rx&quot;) as sa_network_error_rx where `itsi-cp-observability-indexes` AND cluster!=* by host.name span=15m | eval sa_memory_free_mb=sa_memory_free/1024/1024 | rename host.name as host_name | dedup host_name | table _time, host_name, sa_cpu_utilization, sa_memory_free_mb, sa_disk_read, sa_disk_write, sa_network_receive, sa_network_send, sa_network_error_tx, sa_network_error_rx
+</code></pre>
+<p>Streaming</p>
+<pre><code class="language-spl">| sim flow query=&quot;def weighted_duration(base, p, filter_, groupby):
+    error_durations     = data(base + '.duration.ns.' + p, filter=filter_ and filter('sf_error', 'true'),  rollup='max').mean(by=groupby, allow_missing=['sf_httpMethod'])
+    non_error_durations = data(base + '.duration.ns.' + p, filter=filter_ and filter('sf_error', 'false'), rollup='max').mean(by=groupby, allow_missing=['sf_httpMethod'])
+
+    error_counts     = data(base + '.count', filter=filter_ and filter('sf_error', 'true'),  rollup='sum').sum(by=groupby, allow_missing=['sf_httpMethod'])
+    non_error_counts = data(base + '.count', filter=filter_ and filter('sf_error', 'false'), rollup='sum').sum(by=groupby, allow_missing=['sf_httpMethod'])
+
+    error_weight     = (error_durations * error_counts).sum(over='1m')
+    non_error_weight = (non_error_durations * non_error_counts).sum(over='1m')
+
+    total_weight = combine((error_weight if error_weight is not None else 0) + (non_error_weight if non_error_weight is not None else 0))
+    total = combine((error_counts if error_counts is not None else 0) + (non_error_counts if non_error_counts is not None else 0)).sum(over='1m')
+    return (total_weight / total)
+
+filter_ = filter('sf_environment', '*') and filter('sf_service', '*') and filter('sf_error','*') and not filter('sf_dimensionalized', '*')
+groupby = ['sf_service', 'sf_environment', 'sf_error']
+weighted_duration('service.request', 'median', filter_, groupby).publish(label='medianLatency')&quot; 
+| stats avg(_value) as medianLatency by sf_service sf_environment sf_organizationID _time sf_realm
+| eval medianLatency=medianLatency/100000000/300 | eval SplunkApmEntity = sf_service + &quot;-&quot; + sf_environment + &quot;-&quot; + sf_organizationID + &quot;-&quot; + sf_realm
+</code></pre>
+<p>Alerts</p>
+<pre><code class="language-spl">index=&quot;o11y_alerts&quot;
+</code></pre>
+<hr />
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>If data does not appear within 5–10 minutes:</p>
+<ol>
+<li><strong>Check Organization ID</strong> — Go back to <a href="03-configuration.html">Configuration</a> and verify the Organization ID is correctly set.</li>
+<li><strong>Check input status</strong> — Ensure both inputs (<code>O11yHosts</code> and your AWS EC2 clone) are <strong>Enabled</strong> in <code>Settings &gt; Data Inputs</code>.</li>
+<li><strong>Review add-on logs</strong> — Search in Splunk:
+   <code>index=_internal sourcetype=splunkd source=*SIM* (ERROR OR WARN)</code></li>
+</ol>
+<hr />
+<h2 id="success">✅ Success!</h2>
+<p>If data appears in the <code>sim_metrics</code> index and the dashboards show metrics, your O11y → ITSI data pipeline is working correctly.</p>
+<p>You are now ready to use O11y metrics in <strong>ITSI KPI base searches</strong>, either via:</p>
+<ul>
+<li>The indexed <code>sim_metrics</code> data (for historical KPIs)</li>
+<li>The real-time <code>sim</code> command (for live KPIs — recommended)</li>
+</ul>
+<hr />
+<p><a href="04-inputs.html">← Inputs Setup</a> | <a href="../../4-ITSI_CONTENT_PACK_INSTALL_CONFIGURE/README.html">Configure the Content Packs</a></p></article>
+    </main>
+  </div>
+</body>
+</html>

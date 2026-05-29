@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Splunk Observability Cloud (O11y) — Content Pack Configuration | ITSI Workshop</title>
+  <link rel="stylesheet" href="../../assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <div class="site-title"><a href="../../README.html">ITSI Workshop for O11y SAs</a></div>
+      <div class="site-subtitle">Splunk ITSI Workshop Documentation</div>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar"><section class="nav-section"><h3 class="nav-section-title">Navigation</h3><ul class="nav-list">
+<li><a href="../../README.html">Workshop Overview</a></li>
+<li><a href="../../1-ITSI_GDI_AppDynamics/README.html">GDI AppDynamics</a></li>
+<li><a href="../../2-ITSI_GDI_ThousandEyes/README.html">GDI ThousandEyes</a></li>
+<li><a href="../../3-ITSI_GDI_O11Y/README.html">GDI O11y</a></li>
+<li><a class="active" href="../README.html">Content Packs</a></li>
+<li><a href="../../5-ITSI_SERVICE_KPI/README.html">Services</a></li>
+<li><a href="../../6-ITSI_NOTABLE_EVENTS/README.html">Episodes</a></li>
+</ul></section></aside>
+    <main class="main">
+      <div class="breadcrumb">4-ITSI_CONTENT_PACK_INSTALL_CONFIGURE / docs</div>
+      <header class="doc-header">
+        <h1 class="doc-title">Splunk Observability Cloud (O11y) — Content Pack Configuration</h1>
+        <div class="doc-meta">4 minute read • Source: 4-ITSI_CONTENT_PACK_INSTALL_CONFIGURE/docs/observability.md</div>
+      </header>
+      <article class="content"><h1 id="splunk-observability-cloud-o11y-content-pack-configuration">Splunk Observability Cloud (O11y) — Content Pack Configuration</h1>
+<p><a href="../README.html">← Back to README</a></p>
+<p>This page describes how to install and configure the <strong>Content Pack for Splunk Observability Cloud</strong> within ITSI. This content pack bridges Splunk Observability Cloud (including APM, Infrastructure Monitoring, and RUM) with ITSI, enabling unified service monitoring and entity discovery.</p>
+<p>📚 <strong>Official documentation:</strong> <a href="https://help.splunk.com/en/splunk-it-service-intelligence/content-packs-for-itsi-and-ite/splunk-observability-cloud/3.4/install-and-configure-the-content-pack-for-splunk-observability-cloud">Install and Configure the Content Pack for Splunk Observability Cloud</a></p>
+<hr />
+<h2 id="what-this-content-pack-provides">What This Content Pack Provides</h2>
+<p>The Content Pack for Splunk Observability Cloud gives you:</p>
+<ul>
+<li><strong>Entity discovery searches</strong> to import hosts, AWS EC2 instances, and APM application entities from Observability Cloud into ITSI.</li>
+<li><strong>Pre-configured KPI base searches</strong> covering infrastructure metrics, APM traces, and synthetic monitoring data.</li>
+<li><strong>Service templates</strong> for common Observability Cloud entity types (APM, infrastructure, RUM).</li>
+<li><strong>Glass tables and dashboards</strong> for unified observability within ITSI.</li>
+</ul>
+<blockquote>
+<p>ℹ️ This content pack depends on data collected by the <strong>Splunk Infrastructure Monitoring Add-on</strong>. Install and configure this add-on across all tiers of your Splunk deployment (heavy forwarders, indexers, search heads) before proceeding.</p>
+<p>⚠️ <strong>Migrating from Content Pack for Splunk Infrastructure Monitoring?</strong> If you previously installed that content pack, follow the <a href="https://docs.splunk.com/Documentation/CPObservability/3.4.0/CP/Migrate">migration guide</a> before installing this one.</p>
+</blockquote>
+<hr />
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>[ ] Splunk Infrastructure Monitoring Add-on installed and sending data.</li>
+<li>[ ] Splunk App for Content Packs v2.3.0 or later installed.</li>
+<li>[ ] A full ITSI backup taken (recommended before any content pack installation).</li>
+</ul>
+<hr />
+<h2 id="step-1-install-the-content-pack">Step 1 — Install the Content Pack</h2>
+<ol>
+<li>In ITSI, go to <strong>Apps &gt; IT Service Intelligence</strong>.</li>
+<li>Navigate to <strong>Configuration &gt; Data Integrations</strong>.</li>
+<li>Click the <strong>Content Library</strong> tab to see all available content packs.</li>
+</ol>
+<p><img alt="Content Library tab showing all available content packs" src="../img/image1.png" /></p>
+<ol>
+<li>Search for <strong>Observability</strong> in the search bar.</li>
+</ol>
+<p><img alt="Search results showing the Splunk Observability Cloud content pack" src="../img/image12.png" /></p>
+<ol>
+<li>Click on the Splunk Observability Cloud content pack and review the list of available objects.</li>
+</ol>
+<p><img alt="Objects available in the Splunk Observability Cloud content pack" src="../img/image13.png" /></p>
+<blockquote>
+<p>⚠️ <strong>Best Practice:</strong> Content pack objects are <strong>disabled by default</strong> upon import. Do not enable everything at once — selectively enable only the searches relevant to your data sources.</p>
+</blockquote>
+<ol>
+<li>
+<p>On the same screen, click <strong>Proceed</strong> to begin the installation.</p>
+</li>
+<li>
+<p>We will install everything disabled. Make sure you leave yours the same as the example below</p>
+</li>
+</ol>
+<p><img alt="Appd Pack Install 1" src="../img/o11y1.png" />
+   <img alt="Appd Pack Install 1" src="../img/o11y2.png" /></p>
+<ol>
+<li>
+<p>Click Install selected and then install (skip backups)</p>
+</li>
+<li>
+<p>You should see this</p>
+</li>
+</ol>
+<p><img alt="Appd Pack Install OK" src="../img/o11y3.png" /></p>
+<hr />
+<h2 id="step-2-enable-entity-discovery-searches">Step 2 — Enable Entity Discovery Searches</h2>
+<p>After installation, enable the following Entity Discovery Searches for the Observability Cloud data sources you use:</p>
+<table>
+<thead>
+<tr>
+<th>Search Name</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ITSI Import Objects - Get_OS_Hosts</code></td>
+<td>Discovers OS-level host entities</td>
+</tr>
+<tr>
+<td><code>ITSI Import Objects - Get_SIM_AWS_EC2</code></td>
+<td>Discovers AWS EC2 instances from Infrastructure Monitoring</td>
+</tr>
+<tr>
+<td><code>ITSI Import Objects - Splunk-APM Application Entity Search</code></td>
+<td>Discovers APM application entities</td>
+</tr>
+</tbody>
+</table>
+<p>To enable each search:</p>
+<ol>
+<li>In the ITSI menu, go to <strong>Configuration &gt; Entity Management</strong>.</li>
+<li>Click <strong>Entity Discovery Searches</strong>.</li>
+<li>In the <strong>App</strong> dropdown, select <strong>Content Pack for Splunk Observability Cloud</strong> (<code>DA-ITSI-CP-splunk-observability</code>).</li>
+<li>In the <strong>Owner</strong> dropdown, select <strong>All</strong>.</li>
+<li>For each search marked as  <strong>Yes</strong> in the table below: </li>
+<li>Click the search name, activate it, save.</li>
+<li>Adjust the cron schedule like you did with the others. <code>*/5 * * * *</code></li>
+</ol>
+<p><img alt="Appd Pack Install OK" src="../img/o11ycp.png" /></p>
+<blockquote>
+<blockquote>
+<p>Follow the <strong>same scheduling logic</strong> used for AppDynamics and ThousandEyes — set the cron expression to run every 5–10 minutes for lab environments.</p>
+</blockquote>
+</blockquote>
+<hr />
+<h2 id="step-3-validate">Step 3 — Validate</h2>
+<p>Once entity searches are running:</p>
+<ol>
+<li>Wait 5 minutes and check if the searches you've enabled are returning any values</li>
+</ol>
+<p>📚 Full reference: <a href="https://docs.splunk.com/Documentation/CPObservability/3.4.0/CP/KPIReference">KPI Reference for the Content Pack for Splunk Observability Cloud</a></p>
+<hr />
+<p><a href="observability.html">Back to  O11y</a> | <a href="../../5-ITSI_SERVICE_KPI/README.html">Next - Service and KPI Configuration</a></p></article>
+    </main>
+  </div>
+</body>
+</html>

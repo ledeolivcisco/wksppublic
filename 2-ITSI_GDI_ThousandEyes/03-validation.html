@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>3. Validation | ITSI Workshop</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <div class="site-title"><a href="../README.html">ITSI Workshop for O11y SAs</a></div>
+      <div class="site-subtitle">Splunk ITSI Workshop Documentation</div>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar"><section class="nav-section"><h3 class="nav-section-title">Navigation</h3><ul class="nav-list">
+<li><a href="../README.html">Workshop Overview</a></li>
+<li><a href="../1-ITSI_GDI_AppDynamics/README.html">GDI AppDynamics</a></li>
+<li><a class="active" href="README.html">GDI ThousandEyes</a></li>
+<li><a href="../3-ITSI_GDI_O11Y/README.html">GDI O11y</a></li>
+<li><a href="../4-ITSI_CONTENT_PACK_INSTALL_CONFIGURE/README.html">Content Packs</a></li>
+<li><a href="../5-ITSI_SERVICE_KPI/README.html">Services</a></li>
+<li><a href="../6-ITSI_NOTABLE_EVENTS/README.html">Episodes</a></li>
+</ul></section></aside>
+    <main class="main">
+      <div class="breadcrumb">2-ITSI_GDI_ThousandEyes</div>
+      <header class="doc-header">
+        <h1 class="doc-title">3. Validation</h1>
+        <div class="doc-meta">1 minute read • Source: 2-ITSI_GDI_ThousandEyes/03-validation.md</div>
+      </header>
+      <article class="content"><h1 id="3-validation">3. Validation</h1>
+<p>Once installation and configuration are complete, verify that ThousandEyes data is flowing into Splunk.</p>
+<hr />
+<h2 id="option-a-use-the-built-in-dashboard">Option A — Use the Built-in Dashboard</h2>
+<ol>
+<li>Go to <strong>Apps → Cisco ThousandEyes App for Splunk</strong></li>
+<li>Navigate to <strong>Dashboards → Data Collection Status</strong></li>
+</ol>
+<p><img alt="Data Collection Status dashboard" src="img/image13.png" /></p>
+<p>A healthy integration will show recent events grouped by test name and type.</p>
+<hr />
+<h2 id="option-b-run-a-search-query">Option B — Run a Search Query</h2>
+<p>Run the following SPL query in Splunk Search to confirm events are being indexed:</p>
+<pre><code class="language-spl">index=te_index
+| stats count by test_name, test_type
+| sort -count
+</code></pre>
+<p><strong>Expected output:</strong> A table listing your ThousandEyes test names and types, with a count of events per test. If the table is empty or returns no results, revisit the <a href="./02-configuration.html">Configuration</a> steps.</p>
+<hr />
+<h2 id="troubleshooting">Troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Likely Cause</th>
+<th>Resolution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No data in <code>te_index</code></td>
+<td>HEC token not set to correct index</td>
+<td>Re-check <a href="./02-configuration.html#3-token-creation">Token Creation</a></td>
+</tr>
+<tr>
+<td>Authorization fails</td>
+<td>Self-signed certificate on HEC</td>
+<td>Replace with a valid TLS certificate</td>
+</tr>
+<tr>
+<td>Inputs show as Inactive</td>
+<td>ThousandEyes API connectivity issue</td>
+<td>Verify API credentials and network access</td>
+</tr>
+<tr>
+<td>Macro searches return wrong data</td>
+<td>Macros still using <code>index=*</code></td>
+<td>Revisit <a href="./02-configuration.html#5-updating-macros">Updating Macros</a></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<blockquote>
+<p>✅ If the dashboard shows data and the SPL query returns results, your ThousandEyes integration is fully operational and ready for use with ITSI.</p>
+</blockquote>
+<hr />
+<p><a href="./02-configuration.html">← Back: Configuration</a> | <a href="../3-ITSI_GDI_O11Y/README.html">GDI - O11y -&gt; </a></p></article>
+    </main>
+  </div>
+</body>
+</html>

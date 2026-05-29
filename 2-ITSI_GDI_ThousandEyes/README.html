@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ITSI — GDI — ThousandEyes Integration Guide | ITSI Workshop</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <div class="site-title"><a href="../README.html">ITSI Workshop for O11y SAs</a></div>
+      <div class="site-subtitle">Splunk ITSI Workshop Documentation</div>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar"><section class="nav-section"><h3 class="nav-section-title">Navigation</h3><ul class="nav-list">
+<li><a href="../README.html">Workshop Overview</a></li>
+<li><a href="../1-ITSI_GDI_AppDynamics/README.html">GDI AppDynamics</a></li>
+<li><a class="active" href="README.html">GDI ThousandEyes</a></li>
+<li><a href="../3-ITSI_GDI_O11Y/README.html">GDI O11y</a></li>
+<li><a href="../4-ITSI_CONTENT_PACK_INSTALL_CONFIGURE/README.html">Content Packs</a></li>
+<li><a href="../5-ITSI_SERVICE_KPI/README.html">Services</a></li>
+<li><a href="../6-ITSI_NOTABLE_EVENTS/README.html">Episodes</a></li>
+</ul></section></aside>
+    <main class="main">
+      <div class="breadcrumb">2-ITSI_GDI_ThousandEyes</div>
+      <header class="doc-header">
+        <h1 class="doc-title">ITSI — GDI — ThousandEyes Integration Guide</h1>
+        <div class="doc-meta">2 minute read • Source: 2-ITSI_GDI_ThousandEyes/README.md</div>
+      </header>
+      <article class="content"><h1 id="itsi-gdi-thousandeyes-integration-guide">ITSI — GDI — ThousandEyes Integration Guide</h1>
+<blockquote>
+<p><strong>Purpose:</strong> This guide explains how to ingest ThousandEyes data into Splunk ITSI using the Cisco ThousandEyes App for Splunk.</p>
+</blockquote>
+<hr />
+<h2 id="overview">Overview</h2>
+<p>This document covers the end-to-end setup for integrating <strong>Cisco ThousandEyes</strong> with <strong>Splunk ITSI</strong> via the official Splunk App. Once configured, ThousandEyes test metrics, path visualization data, events, and activity logs will be available inside ITSI for episode management and service health monitoring.</p>
+<h3 id="components-involved">Components Involved</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cisco ThousandEyes App for Splunk</strong></td>
+<td>Collects metrics via OpenTelemetry (OTel) and the ThousandEyes REST API</td>
+</tr>
+<tr>
+<td><strong>Splunk HEC (HTTP Event Collector)</strong></td>
+<td>Receives ThousandEyes alert/webhook payloads</td>
+</tr>
+<tr>
+<td><strong>Splunk ITSI</strong></td>
+<td>Consumes events for episode management via the Universal Alerting schema</td>
+</tr>
+</tbody>
+</table>
+<p>📖 <strong>Official documentation:</strong> <a href="https://docs.thousandeyes.com/product-documentation/integration-guides/custom-built-integrations/splunk-app">ThousandEyes Splunk App Integration Guide</a></p>
+<hr />
+<h2 id="architecture">Architecture</h2>
+<p>ThousandEyes data reaches Splunk via two complementary paths:</p>
+<ol>
+<li><strong>Cisco ThousandEyes App for Splunk</strong> — Uses OpenTelemetry (OTel) streams and the ThousandEyes REST API to collect test metrics, path visualization data, events, and activity logs.</li>
+<li><strong>Webhook / Alert Forwarding</strong> — ThousandEyes alert notifications are pushed to Splunk HEC and consumed by the ITSI Universal Alerting schema for episode management.</li>
+</ol>
+<blockquote>
+<p>⚠️ <strong>Pre-requisite:</strong> HEC must have a valid (non-self-signed) TLS certificate.</p>
+</blockquote>
+<pre><code>ThousandEyes  ──[OTel / REST API]──►  Cisco TE App for Splunk  ──►  te_index  ──►  ITSI
+ThousandEyes  ──[Webhook / HEC]────►  Splunk HEC               ──►  ITSI Universal Alerting
+</code></pre>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="./00-TE-setup.html">ThousandEyes Setup</a></li>
+<li><a href="./01-installation.html">Installation</a></li>
+<li><a href="./02-configuration.html">Configuration</a></li>
+<li><a href="./02-configuration.html#1-connection-setup">Connection Setup</a></li>
+<li><a href="./02-configuration.html#2-index-creation">Index Creation</a></li>
+<li><a href="./02-configuration.html#3-token-creation">Token Creation</a></li>
+<li><a href="./02-configuration.html#4-inputs-configuration">Inputs Configuration</a></li>
+<li><a href="./02-configuration.html#5-updating-macros">Updating Macros</a></li>
+<li><a href="./03-validation.html">Validation</a></li>
+</ol>
+<hr />
+<p><a href="../1-ITSI_GDI_AppDynamics/README.html">Back</a> | <a href="../2-ITSI_GDI_ThousandEyes/00-TE-setup.html">Next: GDI ThousandEyes - setup →</a></p></article>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>4. Inputs Setup | ITSI Workshop</title>
+  <link rel="stylesheet" href="../../assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <div class="site-title"><a href="../../README.html">ITSI Workshop for O11y SAs</a></div>
+      <div class="site-subtitle">Splunk ITSI Workshop Documentation</div>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar"><section class="nav-section"><h3 class="nav-section-title">Navigation</h3><ul class="nav-list">
+<li><a href="../../README.html">Workshop Overview</a></li>
+<li><a href="../../1-ITSI_GDI_AppDynamics/README.html">GDI AppDynamics</a></li>
+<li><a href="../../2-ITSI_GDI_ThousandEyes/README.html">GDI ThousandEyes</a></li>
+<li><a class="active" href="../README.html">GDI O11y</a></li>
+<li><a href="../../4-ITSI_CONTENT_PACK_INSTALL_CONFIGURE/README.html">Content Packs</a></li>
+<li><a href="../../5-ITSI_SERVICE_KPI/README.html">Services</a></li>
+<li><a href="../../6-ITSI_NOTABLE_EVENTS/README.html">Episodes</a></li>
+</ul></section></aside>
+    <main class="main">
+      <div class="breadcrumb">3-ITSI_GDI_O11Y / docs</div>
+      <header class="doc-header">
+        <h1 class="doc-title">4. Inputs Setup</h1>
+        <div class="doc-meta">3 minute read • Source: 3-ITSI_GDI_O11Y/docs/04-inputs.md</div>
+      </header>
+      <article class="content"><h1 id="4-inputs-setup">4. Inputs Setup</h1>
+<h2 id="overview">Overview</h2>
+<p>As mentioned in the <a href="01-architecture.html">Architecture section</a>, the SIM Add-on can either:</p>
+<ul>
+<li><strong>Query O11y in real time</strong> (via the <code>sim</code> command)</li>
+<li><strong>Index data</strong> into the <code>sim_metrics</code> index (via Modular Inputs)</li>
+</ul>
+<p>In this section, we configure <strong>Modular Inputs</strong> because some ITSI components require indexed data.</p>
+<hr />
+<h2 id="steps">Steps</h2>
+<h3 id="1-navigate-to-data-inputs">1. Navigate to Data Inputs</h3>
+<p>In Splunk, go to:</p>
+<pre><code>Settings &gt; Data Inputs
+</code></pre>
+<h3 id="2-find-the-data-stream">2. Find the Data Stream</h3>
+<p>Locate <strong>Splunk Infrastructure Monitoring Data Streams</strong> and click on it.</p>
+<p><img alt="Stream Input Sample" src="../img/image31.png" /></p>
+<h3 id="3-clone-the-os-hosts-input">3. Clone the OS Hosts Input</h3>
+<p>Find the entry named <strong><code>SAMPLE_OS_Hosts</code></strong> and click <strong>Clone</strong>.</p>
+<p><img alt="SAMPLE_OS_Hosts entry in the data inputs list" src="../img/image4.png" /></p>
+<h3 id="4-configure-the-cloned-input">4. Configure the Cloned Input</h3>
+<p>Name the new input <strong><code>O11yHosts</code></strong> and fill in the settings as shown below:</p>
+<p><img alt="O11yHosts configuration — screen 1" src="../img/image5.png" /></p>
+<p><img alt="O11yHosts configuration — screen 2" src="../img/image6.png" /></p>
+<blockquote>
+<p>⚠️ <strong>Do not forget</strong> to fill in your <strong>Organization ID</strong> saved during the <a href="03-configuration.html">Configuration step</a>.</p>
+</blockquote>
+<p>Click <strong>Save</strong> when done.</p>
+<h3 id="5-clone-the-aws-ec2-input">5. Clone the AWS EC2 Input</h3>
+<p>Repeat the same process for <strong><code>SAMPLE_AWS_EC2</code></strong>:</p>
+<ol>
+<li>Find <code>SAMPLE_AWS_EC2</code> in the list</li>
+<li>Click <strong>Clone</strong></li>
+<li>Fill in the configuration (including your Organization ID) - Name it <strong>O11yEC2</strong></li>
+<li>Click <strong>Save</strong></li>
+</ol>
+<h3 id="6-create-a-new-input-for-apm-data">6. Create a new INPUT for APM DATA</h3>
+<ol>
+<li>Click <strong>NEW</strong></li>
+<li>Create the <strong>APM_SERVICE_REQUEST_COUNT</strong> INPUT as follows. Use bellow sigflow as the Program</li>
+</ol>
+<pre><code>    &quot;data('service.request.count', filter=filter('sf_environment', 'shw-*-workshop')).publish(label='servicerequestcount')&quot; 
+
+</code></pre>
+<p><img alt="create APM 1" src="../img/apm1.png" />
+<img alt="create APM 1" src="../img/apm2.png" /></p>
+<ol>
+<li>Click <strong>Save</strong></li>
+</ol>
+<h3 id="7-enable-the-inputs">7. Enable the Inputs</h3>
+<p>After creating the inputs, click <strong>Enable</strong> for each one you created.</p>
+<p><img alt="create APM 1" src="../img/inputs_enabled.png" /></p>
+<hr />
+<h2 id="result">Result</h2>
+<p>Once enabled, the add-on will begin extracting data from O11y and ingesting it into the <strong><code>sim_metrics</code></strong> index automatically.</p>
+<pre><code>|mpreview index=&quot;sim_metrics&quot;
+</code></pre>
+<hr />
+<h2 id="alerts-ingestion">Alerts Ingestion</h2>
+<p>Events and alerts from Splunk Observability Cloud (O11y) are sent to ITSI <strong>exclusively via webhook</strong>. The overall flow is:</p>
+<pre><code>Splunk O11y Detector
+       │
+       │  (webhook / HTTP)
+       ▼
+Splunk HEC Endpoint
+       │
+       ▼
+  o11y_alerts index
+       │
+       ▼
+ITSI Correlation Search
+       │
+       ▼
+  Episodes &amp; Alerts
+</code></pre>
+<h3 id="step-1-configure-splunk-hec">Step 1 — Configure Splunk (HEC)</h3>
+<p>In <strong>Splunk</strong>, perform the following:</p>
+<ol>
+<li>Create a new events index named <strong><code>o11y_alerts</code></strong></li>
+<li>Create a new HEC Token named <strong><code>o11y_token</code></strong> having <strong><code>o11y_alerts</code></strong> index as default<blockquote>
+<p>Keep note of the HEC endpoint URL and token value — you will need them in the next step.</p>
+</blockquote>
+</li>
+</ol>
+<p><img alt="HEC TOKEN" src="../img/hec.png" /></p>
+<h3 id="step-2-configure-the-splunk-observability-cloud-integration">Step 2 — Configure the Splunk Observability Cloud Integration</h3>
+<p>In <strong>Splunk Observability Cloud</strong>, navigate to:</p>
+<pre><code>Data Management &gt; Available Integrations
+</code></pre>
+<p>Search for <strong>Splunk Platform</strong>:</p>
+<p><img alt="Splunk Platform Integration search" src="../img/image6o11y.png" /></p>
+<p>Click <strong>Next</strong> and fill in the connection details:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Connection Name</td>
+<td><code>OnlineBoutique-ITSI-Integration</code> (or your preferred name)</td>
+</tr>
+<tr>
+<td>URL</td>
+<td><code>https://&lt;hec.host&gt;:&lt;hec_port&gt;</code></td>
+</tr>
+<tr>
+<td>HEC Token</td>
+<td><code>&lt;your o11y_alerts HEC token&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p><img alt="Splunk Platform Integration — Connection details" src="../img/image7o11y.png" /></p>
+<p>Click <strong>Next</strong>.</p>
+<p>Keep the <strong>Default Message</strong> format as-is:</p>
+<p><img alt="Splunk Platform Integration — Default message" src="../img/image8o11y.png" /></p>
+<p>Click <strong>Review and Save</strong>.</p>
+<h3 id="step-3-create-a-detector-having-this-new-splunk-integration-as-the-recipient">Step 3 — Create a Detector having this new Splunk Integration as the recipient</h3>
+<p>Create a new <strong>Detector</strong> in Splunk Observability Cloud and add the Splunk integration you just created as a <strong>recipient</strong>:</p>
+<blockquote>
+<blockquote>
+<p>Shortcut - you can look for a detector called <strong>itsi-workshop</strong> and add your recipient to it.</p>
+</blockquote>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Alert when</strong></td>
+<td>Latency: Service/Endpoint</td>
+</tr>
+<tr>
+<td><strong>Condition</strong></td>
+<td>Static Threshold</td>
+</tr>
+<tr>
+<td><strong>Scope alerting to env</strong></td>
+<td>shw-*</td>
+</tr>
+<tr>
+<td><strong>Service/endpoint</strong></td>
+<td>frontend / All endpoints</td>
+</tr>
+<tr>
+<td><strong>Trigger Threshold</strong></td>
+<td>15000</td>
+</tr>
+<tr>
+<td><strong>Clear Threshold</strong></td>
+<td>10000</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="O11y Detector — Add Splunk integration as recipient" src="../img/image9o11y.png" /></p>
+<hr />
+<p><a href="03-configuration.html">← Configuration</a> | <a href="05-validation.html">Next: Validation →</a></p></article>
+    </main>
+  </div>
+</body>
+</html>

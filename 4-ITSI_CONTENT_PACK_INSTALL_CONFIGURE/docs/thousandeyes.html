@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cisco ThousandEyes — Content Pack Configuration | ITSI Workshop</title>
+  <link rel="stylesheet" href="../../assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <div class="site-title"><a href="../../README.html">ITSI Workshop for O11y SAs</a></div>
+      <div class="site-subtitle">Splunk ITSI Workshop Documentation</div>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar"><section class="nav-section"><h3 class="nav-section-title">Navigation</h3><ul class="nav-list">
+<li><a href="../../README.html">Workshop Overview</a></li>
+<li><a href="../../1-ITSI_GDI_AppDynamics/README.html">GDI AppDynamics</a></li>
+<li><a href="../../2-ITSI_GDI_ThousandEyes/README.html">GDI ThousandEyes</a></li>
+<li><a href="../../3-ITSI_GDI_O11Y/README.html">GDI O11y</a></li>
+<li><a class="active" href="../README.html">Content Packs</a></li>
+<li><a href="../../5-ITSI_SERVICE_KPI/README.html">Services</a></li>
+<li><a href="../../6-ITSI_NOTABLE_EVENTS/README.html">Episodes</a></li>
+</ul></section></aside>
+    <main class="main">
+      <div class="breadcrumb">4-ITSI_CONTENT_PACK_INSTALL_CONFIGURE / docs</div>
+      <header class="doc-header">
+        <h1 class="doc-title">Cisco ThousandEyes — Content Pack Configuration</h1>
+        <div class="doc-meta">3 minute read • Source: 4-ITSI_CONTENT_PACK_INSTALL_CONFIGURE/docs/thousandeyes.md</div>
+      </header>
+      <article class="content"><h1 id="cisco-thousandeyes-content-pack-configuration">Cisco ThousandEyes — Content Pack Configuration</h1>
+<p><a href="../README.html">← Back to README</a></p>
+<p>This page describes how to install and configure the <strong>Content Pack for Cisco ThousandEyes</strong> within ITSI. This content pack enables you to monitor and troubleshoot ThousandEyes network tests using ITSI services, KPIs, and entity discovery searches.</p>
+<p>📚 <strong>Official documentation:</strong> <a href="https://help.splunk.com/en/splunk-it-service-intelligence/content-packs-for-itsi-and-ite/cisco-thousandeyes/1.0/overview/about-the-content-pack-for-cisco-thousandeyes">About the Content Pack for Cisco ThousandEyes</a></p>
+<hr />
+<h2 id="what-this-content-pack-provides">What This Content Pack Provides</h2>
+<p>The Content Pack for Cisco ThousandEyes gives you:</p>
+<ul>
+<li><strong>Services</strong> that represent ThousandEyes tests as ITSI services with KPIs and entities.</li>
+<li><strong>Service templates</strong> with predefined service properties to create and manage multiple services. Changes to a template propagate to all linked services.</li>
+<li><strong>KPI base searches</strong> that share search definitions across multiple KPIs to reduce load and improve performance.</li>
+</ul>
+<blockquote>
+<p>ℹ️ This content pack requires the <strong>Cisco ThousandEyes App for Splunk</strong> to be installed and receiving data. The default expected data index is <code>thousandeyes</code>.</p>
+</blockquote>
+<hr />
+<h2 id="step-1-install-the-content-pack">Step 1 — Install the Content Pack</h2>
+<ol>
+<li>In ITSI, go to <strong>Apps &gt; IT Service Intelligence</strong>.</li>
+<li>Navigate to <strong>Configuration &gt; Data Integrations</strong>.</li>
+<li>Click the <strong>Content Library</strong> tab to see all available content packs.</li>
+</ol>
+<p><img alt="Content Library tab showing all available content packs" src="../img/image1.png" /></p>
+<ol>
+<li>Search for <strong>ThousandEyes</strong> in the search bar.</li>
+</ol>
+<p><img alt="Search results showing ThousandEyes content pack" src="../img/image9.png" /></p>
+<ol>
+<li>Click on the ThousandEyes content pack and review the list of objects that will be installed.</li>
+</ol>
+<p><img alt="ThousandEyes content pack objects available for installation" src="../img/image10.png" /></p>
+<ol>
+<li>On the same screen, click <strong>Proceed</strong> to begin the installation.</li>
+</ol>
+<blockquote>
+<p>⚠️ <strong>Best Practice:</strong> After installation, all saved searches are <strong>disabled by default</strong>. Do <strong>not</strong> enable everything at once. Follow the steps below to selectively enable only the searches required for your environment.</p>
+</blockquote>
+<ol>
+<li>We will install everything disabled. Make sure you leave yours the same as the example below</li>
+</ol>
+<p><img alt="Appd Pack Install 1" src="../img/te1.png" />
+   <img alt="Appd Pack Install 1" src="../img/te2.png" /></p>
+<ol>
+<li>
+<p>Click Install selected and then install (skip backups)</p>
+</li>
+<li>
+<p>You should see this</p>
+</li>
+</ol>
+<p><img alt="Appd Pack Install OK" src="../img/te3.png" /></p>
+<hr />
+<h2 id="step-2-enable-the-entity-discovery-search">Step 2 — Enable the Entity Discovery Search</h2>
+<p>Just as with AppDynamics, you need to enable the ThousandEyes entity discovery search so ITSI can automatically import ThousandEyes test entities.</p>
+<ol>
+<li>In the ITSI menu, go to <strong>Configuration &gt; Entity Management</strong>.</li>
+<li>Click <strong>Entity Discovery Searches</strong> and search for <strong>Thousand</strong>.</li>
+</ol>
+<p><img alt="Entity Discovery Searches filtered by ThousandEyes" src="../img/image11.png" /></p>
+<ol>
+<li>Follow the same steps used for AppDynamics to <strong>enable</strong> the search and <strong>adjust the execution schedule</strong>.</li>
+</ol>
+<hr />
+<h2 id="step-3-adjust-the-search-schedule">Step 3 — Adjust the Search Schedule</h2>
+<p>Reduce the search execution frequency for lab and testing purposes:</p>
+<ol>
+<li>Click the search name, then click <strong>Edit Search</strong>.</li>
+<li>Toggle <strong>Search active?</strong> to <strong>Yes</strong>.</li>
+<li>Click <strong>Edit Schedule</strong> and set the cron expression to run every 5–10 minutes (e.g., <code>*/5 * * * *</code>).</li>
+<li>Click <strong>Save</strong>.</li>
+</ol>
+<hr />
+<h2 id="step-4-update-the-index-macro">Step 4 — Update the Index Macro</h2>
+<p>If your ThousandEyes data stream uses an index other than <code>thousandeyes</code>, update the search macro:</p>
+<ol>
+<li>Go to <strong>Settings &gt; Advanced Search &gt; Search Macros</strong>.</li>
+<li>In the <strong>App</strong> dropdown, select <strong>Cisco ThousandEyes</strong> (<code>DA-ITSI-CP-thousandeyes</code>).</li>
+<li>Find and click <code>itsi_cp_thousandeyes_index</code>.</li>
+<li>In the <strong>Definition</strong> field, change <code>index="thousandeyes"</code> to <code>te_index</code></li>
+<li>Click <strong>Save</strong>.</li>
+</ol>
+<hr />
+<p>📚 See the full integration guide: <a href="https://docs.thousandeyes.com/product-documentation/integration-guides/custom-built-integrations/splunk-app/itsi">Splunk ITSI Integration — ThousandEyes Documentation</a></p>
+<hr />
+<p><a href="appdynamics.html">Back to ThousandEyes</a> | <a href="observability.html">Next: Splunk Observability Cloud →</a></p></article>
+    </main>
+  </div>
+</body>
+</html>

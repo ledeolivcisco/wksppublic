@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ITSI — GDI — AppDynamics Integration | ITSI Workshop</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <div class="site-title"><a href="../README.html">ITSI Workshop for O11y SAs</a></div>
+      <div class="site-subtitle">Splunk ITSI Workshop Documentation</div>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar"><section class="nav-section"><h3 class="nav-section-title">Navigation</h3><ul class="nav-list">
+<li><a href="../README.html">Workshop Overview</a></li>
+<li><a class="active" href="README.html">GDI AppDynamics</a></li>
+<li><a href="../2-ITSI_GDI_ThousandEyes/README.html">GDI ThousandEyes</a></li>
+<li><a href="../3-ITSI_GDI_O11Y/README.html">GDI O11y</a></li>
+<li><a href="../4-ITSI_CONTENT_PACK_INSTALL_CONFIGURE/README.html">Content Packs</a></li>
+<li><a href="../5-ITSI_SERVICE_KPI/README.html">Services</a></li>
+<li><a href="../6-ITSI_NOTABLE_EVENTS/README.html">Episodes</a></li>
+</ul></section></aside>
+    <main class="main">
+      <div class="breadcrumb">1-ITSI_GDI_AppDynamics</div>
+      <header class="doc-header">
+        <h1 class="doc-title">ITSI — GDI — AppDynamics Integration</h1>
+        <div class="doc-meta">3 minute read • Source: 1-ITSI_GDI_AppDynamics/README.md</div>
+      </header>
+      <article class="content"><h1 id="itsi-gdi-appdynamics-integration">ITSI — GDI — AppDynamics Integration</h1>
+<blockquote>
+<p><strong>Goal:</strong> This document explains the procedure for ingesting AppDynamics data into Splunk ITSI (IT Service Intelligence) in a concise and practical way.</p>
+</blockquote>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#architecture">Architecture</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#configuration">Configuration</a></li>
+<li><a href="#account-setup">Account Setup</a></li>
+<li><a href="#input-configuration">Input Configuration</a></li>
+<li><a href="#validation">Validation</a></li>
+<li><a href="#appendix--creating-an-api-token-in-appdynamics">Appendix — Creating an API Token in AppDynamics</a></li>
+</ul>
+<hr />
+<h2 id="overview">Overview</h2>
+<h3 id="components-involved">Components Involved</h3>
+<ul>
+<li><strong>Cisco Splunk Add-on for AppDynamics</strong></li>
+<li>📖 Documentation: <a href="https://docs.splunk.com/Documentation/AppD/latest/AddOn/About">https://docs.splunk.com/Documentation/AppD/latest/AddOn/About</a></li>
+</ul>
+<p><img alt="Cisco Splunk Add-on for AppDynamics" src="img/image1.png" /></p>
+<hr />
+<h2 id="architecture">Architecture</h2>
+<p>The <strong>Splunk Add-on for AppDynamics</strong> collects data from the AppDynamics REST API via modular inputs. It provides seven input types:</p>
+<table>
+<thead>
+<tr>
+<th>Input Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>High Level Status</strong></td>
+<td>Overall application health</td>
+</tr>
+<tr>
+<td><strong>Hardware Metrics</strong></td>
+<td>Node-level CPU, memory, and disk metrics</td>
+</tr>
+<tr>
+<td><strong>Application Business Transaction (BT) Snapshots</strong></td>
+<td>Detailed transaction snapshots</td>
+</tr>
+<tr>
+<td><strong>Health Rule Violations</strong></td>
+<td>Triggered AppDynamics health rules</td>
+</tr>
+<tr>
+<td><strong>Custom Metrics</strong></td>
+<td>User-defined metric collection</td>
+</tr>
+<tr>
+<td><strong>Events Data</strong></td>
+<td>Application event records</td>
+</tr>
+<tr>
+<td><strong>Controller Audit Records / License Usage</strong></td>
+<td>Audit trail and license consumption</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="installation">Installation</h2>
+<p>The add-on is available on <a href="https://splunkbase.splunk.com/app/3471">Splunkbase</a> and can be downloaded or installed directly from the Splunk interface.</p>
+<p>In the lab environment, navigate to <strong>Apps → Find More Apps</strong> and search for:</p>
+<pre><code>Cisco Splunk Add-on for AppDynamics
+</code></pre>
+<p><img alt="Find More Apps — Search for AppDynamics Add-on" src="img/image2.png" /></p>
+<p>Click <strong>Install</strong> to proceed.</p>
+<hr />
+<h2 id="configuration">Configuration</h2>
+<p>After installation, two steps are required:
+1. Configure the <strong>connection</strong> to AppDynamics.
+2. Define <strong>which data</strong> will be collected.</p>
+<blockquote>
+<p>⚠️ <strong>Before you begin:</strong> You will need to create an API token to access the AppDynamics API. See the <a href="#appendix--creating-an-api-token-in-appdynamics">Appendix</a> if you haven't done this yet.</p>
+</blockquote>
+<h3 id="account-setup">Account Setup</h3>
+<p>Navigate to <strong>Apps → Splunk Add-on for AppDynamics → Configuration</strong>.</p>
+<p>Click <strong>Add</strong> and fill in the required fields as shown below:</p>
+<p><img alt="AppDynamics Connection Configuration" src="img/image3.png" /></p>
+<p>Required fields:</p>
+<ul>
+<li><strong>Name</strong> - Something to identify this connection i.e. <code>SE-LAB-Account</code></li>
+<li><strong>AppDynamics Controller URL</strong> — e.e., <code>https://&lt;account&gt;.saas.appdynamics.com</code></li>
+<li><strong>Client Name and Secret</strong> (or API client credentials)</li>
+</ul>
+<hr />
+<h3 id="input-configuration">Input Configuration</h3>
+<p>Once the connection is configured, proceed to set up the data inputs.</p>
+<p>Navigate to <strong>Inputs</strong> and click <strong>Create New Input</strong>.</p>
+<p>For this lab, three different input types will be configured.</p>
+<h4 id="database-metrics">Database Metrics</h4>
+<p>Fill in the fields as shown:</p>
+<p><img alt="Input Configuration — Input 1" src="img/image4.png" /></p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>Remember to Uncheck the <code>Return one record for the duration, instead of per minute</code> option.</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<h4 id="high-level-status">High Level Status</h4>
+<p><img alt="Input Configuration — Input 2" src="img/image5.png" /></p>
+<h4 id="events-data">Events Data</h4>
+<p><img alt="Input Configuration — Input 3" src="img/image6.png" /></p>
+<p><img alt="Input Configuration — Input 3 (continued)" src="img/image7.png" /></p>
+<p>Once completed, AppDynamics data will begin appearing in Splunk within a few minutes.</p>
+<hr />
+<h2 id="validation">Validation</h2>
+<p>The quickest way to verify the integration is to click on <strong>Monitoring Dashboard</strong> inside the add-on.</p>
+<p><img alt="AppDynamics Monitoring Dashboard" src="img/image8.png" /></p>
+<p>You can also run a direct SPL query in the Splunk Search interface:</p>
+<pre><code class="language-spl">index=appdynamics| stats count by application_name
+| sort -count
+</code></pre>
+<hr />
+<p><a href="../README.html">Back</a> | <a href="../2-ITSI_GDI_ThousandEyes/README.html">Next: GDI ThousandEyes - setup →</a></p>
+<hr />
+<h2 id="appendix-creating-an-api-token-in-appdynamics">Appendix — Creating an API Token in AppDynamics</h2>
+<h3 id="step-1-access-administration">Step 1 — Access Administration</h3>
+<p>After logging in to the AppDynamics controller, click on <strong>Administration</strong>.</p>
+<p><img alt="AppDynamics Administration" src="img/image9.png" /></p>
+<h3 id="step-2-navigate-to-api-clients">Step 2 — Navigate to API Clients</h3>
+<p>Select <strong>API Clients</strong> from the Administration menu.</p>
+<p><img alt="API Clients Menu" src="img/image10.png" /></p>
+<h3 id="step-3-create-the-api-client">Step 3 — Create the API Client</h3>
+<p>Add a <strong>name</strong>, <strong>description</strong>, and assign the following roles:</p>
+<p><img alt="API Client Roles Configuration" src="img/image11.png" /></p>
+<h3 id="step-4-generate-the-secret">Step 4 — Generate the Secret</h3>
+<ol>
+<li>Click <strong>Generate Secret</strong>.</li>
+<li><strong>Save</strong> the configuration.</li>
+<li><strong>Copy</strong> the generated token — you will need it during the add-on configuration.</li>
+</ol>
+<blockquote>
+<p>🔐 <strong>Important:</strong> Store the token securely. It will not be shown again after you leave this page.</p>
+</blockquote>
+<hr />
+<p><a href="../README.html">Back</a> | <a href="../2-ITSI_GDI_ThousandEyes/README.html">Next: GDI ThousandEyes - setup →</a></p></article>
+    </main>
+  </div>
+</body>
+</html>

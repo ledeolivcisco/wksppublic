@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AppDynamics — Content Pack Configuration | ITSI Workshop</title>
+  <link rel="stylesheet" href="../../assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <div class="site-title"><a href="../../README.html">ITSI Workshop for O11y SAs</a></div>
+      <div class="site-subtitle">Splunk ITSI Workshop Documentation</div>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar"><section class="nav-section"><h3 class="nav-section-title">Navigation</h3><ul class="nav-list">
+<li><a href="../../README.html">Workshop Overview</a></li>
+<li><a href="../../1-ITSI_GDI_AppDynamics/README.html">GDI AppDynamics</a></li>
+<li><a href="../../2-ITSI_GDI_ThousandEyes/README.html">GDI ThousandEyes</a></li>
+<li><a href="../../3-ITSI_GDI_O11Y/README.html">GDI O11y</a></li>
+<li><a class="active" href="../README.html">Content Packs</a></li>
+<li><a href="../../5-ITSI_SERVICE_KPI/README.html">Services</a></li>
+<li><a href="../../6-ITSI_NOTABLE_EVENTS/README.html">Episodes</a></li>
+</ul></section></aside>
+    <main class="main">
+      <div class="breadcrumb">4-ITSI_CONTENT_PACK_INSTALL_CONFIGURE / docs</div>
+      <header class="doc-header">
+        <h1 class="doc-title">AppDynamics — Content Pack Configuration</h1>
+        <div class="doc-meta">3 minute read • Source: 4-ITSI_CONTENT_PACK_INSTALL_CONFIGURE/docs/appdynamics.md</div>
+      </header>
+      <article class="content"><h1 id="appdynamics-content-pack-configuration">AppDynamics — Content Pack Configuration</h1>
+<p><a href="../README.html">← Back to README</a></p>
+<p>This page describes how to install and configure the <strong>Content Pack for Splunk AppDynamics</strong> within ITSI. This content pack enables you to import AppDynamics applications into ITSI as services, monitor them through pre-built KPIs, and discover entities automatically.</p>
+<p>📚 <strong>Official documentation:</strong> <a href="https://help.splunk.com/en/splunk-it-service-intelligence/content-packs-for-itsi-and-ite/content-pack-for-splunk-appdynamics/1.0/overview/about-the-content-pack-for-splunk-appdynamics">About the Content Pack for Splunk AppDynamics</a></p>
+<hr />
+<h2 id="what-this-content-pack-provides">What This Content Pack Provides</h2>
+<p>The Content Pack for Splunk AppDynamics gives you:</p>
+<ul>
+<li><strong>Entity searches</strong> to automatically discover and create ITSI entities from ingested AppDynamics data.</li>
+<li><strong>Service templates</strong> with pre-configured KPIs for application performance management.</li>
+<li><strong>KPI base searches</strong> powered by AppDynamics REST API data collected via the Splunk Add-on for AppDynamics.</li>
+<li><strong>Dashboards</strong> and <strong>glass tables</strong> for performance monitoring.</li>
+</ul>
+<blockquote>
+<p>ℹ️ This content pack works together with the <strong>Splunk Add-on for AppDynamics</strong>, which must be installed and collecting data before the content pack searches will return results.</p>
+</blockquote>
+<hr />
+<h2 id="step-1-install-the-content-pack">Step 1 — Install the Content Pack</h2>
+<ol>
+<li>In ITSI, go to <strong>Apps &gt; IT Service Intelligence</strong>.</li>
+<li>Navigate to <strong>Configuration &gt; Data Integrations</strong>.</li>
+<li>Click the <strong>Content Library</strong> tab. You will see all available content packs.</li>
+</ol>
+<p><img alt="Content Library tab showing all available content packs" src="../img/image1.png" /></p>
+<ol>
+<li>Search for <strong>AppDynamics</strong> in the search bar.</li>
+</ol>
+<p><img alt="Search results showing AppDynamics content pack" src="../img/image2.png" /></p>
+<ol>
+<li>Click on the AppDynamics content pack and review the list of objects that will be installed.</li>
+</ol>
+<p><img alt="AppDynamics content pack objects available for installation" src="../img/image3.png" /></p>
+<ol>
+<li>
+<p>On the same screen, click <strong>Proceed</strong> to begin the installation.</p>
+</li>
+<li>
+<p>We will install everything disabled. Make sure you leave yours the same as the example below</p>
+</li>
+</ol>
+<p><img alt="Appd Pack Install 1" src="../img/appd1.png" />
+   <img alt="Appd Pack Install 1" src="../img/appd2.png" /></p>
+<ol>
+<li>Click Install selected and then install (skip backups)</li>
+</ol>
+<blockquote>
+<p>⚠️ <strong>Best Practice:</strong> After installation, all saved searches are <strong>disabled by default</strong>. Do <strong>not</strong> enable everything at once. Follow the steps below to selectively enable only the searches required for your environment.</p>
+</blockquote>
+<ol>
+<li>You should see this</li>
+</ol>
+<p><img alt="Appd Pack Install OK" src="../img/appd3.png" /></p>
+<hr />
+<h2 id="step-2-enable-entity-discovery-searches">Step 2 — Enable Entity Discovery Searches</h2>
+<p>After installation, you need to enable the Entity Discovery Searches so ITSI can automatically discover and import AppDynamics entities.</p>
+<ol>
+<li>In the ITSI menu, go to <strong>Configuration &gt; Entity Management</strong>.</li>
+<li>
+<p>Click <strong>Entity Discovery Searches</strong> and search for <strong>AppDynamics</strong>.</p>
+</li>
+<li>
+<p>For each search marked below as <strong>Yes</strong> :</p>
+</li>
+</ol>
+<p><img alt="Entity Discovery Searches filtered by AppDynamics" src="../img/image4.png" /></p>
+<ul>
+<li>Click the search name</li>
+<li>
+<p>Toggle <strong>Search active?</strong> to <strong>Yes</strong> to activate it.</p>
+<p><img alt="Toggle to enable the search" src="../img/image5.png" /></p>
+</li>
+<li>
+<p><strong>SAVE</strong> IT  </p>
+</li>
+<li>
+<p>Save IT!</p>
+</li>
+</ul>
+<hr />
+<h2 id="step-3-adjust-the-search-schedule">Step 3 — Adjust the Search Schedule</h2>
+<ol>
+<li>For each search marked below as <strong>Yes</strong> :</li>
+</ol>
+<p><img alt="Entity Discovery Searches filtered by AppDynamics" src="../img/image4.png" /></p>
+<ul>
+<li>
+<p>Click the search name</p>
+</li>
+<li>
+<p>Click <em>Edit Search</em></p>
+</li>
+</ul>
+<p><img alt="COnfig search" src="../img/appd4.png" /></p>
+<ul>
+<li>With the search open, click <strong>Edit Schedule</strong>.</li>
+</ul>
+<p><img alt="Edit schedule screen for an entity discovery search" src="../img/image6.png" /></p>
+<ul>
+<li>Adjust the schedule as shown in the figure below:</li>
+</ul>
+<p><img alt="Recommended schedule configuration" src="../img/image7.png" /></p>
+<ul>
+<li>
+<p>In the <strong>Cron Expression</strong> field, use a number between <strong>5 and 10</strong> (e.g., <code>*/5 * * * *</code> to run every 5 minutes).</p>
+</li>
+<li>
+<p>Click <strong>Save</strong>.</p>
+</li>
+</ul>
+<hr />
+<h2 id="step-4-validate-the-search-results">Step 4 — Validate the Search Results</h2>
+<p>To confirm that entities are being discovered correctly, you can run the search manually:</p>
+<ol>
+<li>Selec some searches and... </li>
+<li>Click <strong>Run Search</strong> to execute the query immediately.</li>
+<li>Review the results to verify that AppDynamics data is flowing in correctly.</li>
+</ol>
+<p><img alt="Search results showing AppDynamics entity data" src="../img/image8.png" /></p>
+<hr />
+<p><a href="../README.html">← Back to README</a> | <a href="thousandeyes.html">Next: ThousandEyes →</a></p></article>
+    </main>
+  </div>
+</body>
+</html>

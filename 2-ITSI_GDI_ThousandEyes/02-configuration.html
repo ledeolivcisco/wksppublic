@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2. Configuration | ITSI Workshop</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <div class="site-title"><a href="../README.html">ITSI Workshop for O11y SAs</a></div>
+      <div class="site-subtitle">Splunk ITSI Workshop Documentation</div>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar"><section class="nav-section"><h3 class="nav-section-title">Navigation</h3><ul class="nav-list">
+<li><a href="../README.html">Workshop Overview</a></li>
+<li><a href="../1-ITSI_GDI_AppDynamics/README.html">GDI AppDynamics</a></li>
+<li><a class="active" href="README.html">GDI ThousandEyes</a></li>
+<li><a href="../3-ITSI_GDI_O11Y/README.html">GDI O11y</a></li>
+<li><a href="../4-ITSI_CONTENT_PACK_INSTALL_CONFIGURE/README.html">Content Packs</a></li>
+<li><a href="../5-ITSI_SERVICE_KPI/README.html">Services</a></li>
+<li><a href="../6-ITSI_NOTABLE_EVENTS/README.html">Episodes</a></li>
+</ul></section></aside>
+    <main class="main">
+      <div class="breadcrumb">2-ITSI_GDI_ThousandEyes</div>
+      <header class="doc-header">
+        <h1 class="doc-title">2. Configuration</h1>
+        <div class="doc-meta">3 minute read • Source: 2-ITSI_GDI_ThousandEyes/02-configuration.md</div>
+      </header>
+      <article class="content"><h1 id="2-configuration">2. Configuration</h1>
+<p>This section walks through all the configuration steps required to get ThousandEyes data flowing into Splunk ITSI.</p>
+<hr />
+<h2 id="1-connection-setup">1. Connection Setup</h2>
+<h3 id="authorize-your-thousandeyes-account">Authorize your ThousandEyes Account</h3>
+<ol>
+<li>Go to <strong>Apps → Cisco ThousandEyes App for Splunk</strong></li>
+<li>Click <strong>Configuration</strong></li>
+<li>Click <strong>Add</strong>, then <strong>Authorize</strong></li>
+</ol>
+<p><img alt="ThousandEyes App — Add and Authorize screen" src="img/image2.png" /></p>
+<ol>
+<li>A login screen will appear — sign in with your ThousandEyes credentials</li>
+<li>Confirm the authorization request</li>
+</ol>
+<p><img alt="ThousandEyes OAuth authorization confirmation" src="img/image3.png" /></p>
+<ol>
+<li>Click add</li>
+</ol>
+<blockquote>
+<p>✅ Your ThousandEyes account will be linked to the Splunk app.</p>
+</blockquote>
+<hr />
+<h2 id="2-index-creation">2. Index Creation</h2>
+<p>Create a dedicated Splunk index to receive ThousandEyes data.</p>
+<ol>
+<li>In Splunk, go to <strong>Settings → Data → Indexes</strong></li>
+<li>Click <strong>New Index</strong></li>
+<li>Create an <strong>Events</strong> index with the following settings:</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Index Name</strong></td>
+<td><code>te_index</code></td>
+</tr>
+<tr>
+<td><strong>Index Data Type</strong></td>
+<td>Events</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="Create te_index in Splunk" src="img/image4.png" /></p>
+<blockquote>
+<p>💡 Using a dedicated index (instead of <code>main</code> or a wildcard) ensures better performance and easier macro scoping later.</p>
+</blockquote>
+<hr />
+<h2 id="3-token-creation">3. Token Creation</h2>
+<p>Create an HTTP Event Collector (HEC) token scoped to the <code>te_index</code>.</p>
+<ol>
+<li>In Splunk, go to <strong>Settings → Data → Data Inputs</strong></li>
+<li>Select <strong>HTTP Event Collector</strong></li>
+<li>Click <strong>New Token</strong></li>
+<li>Configure the token:</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Token Name</strong></td>
+<td><code>te_token</code></td>
+</tr>
+<tr>
+<td><strong>Default Index</strong></td>
+<td><code>te_index</code></td>
+</tr>
+</tbody>
+</table>
+<p><img alt="Create HEC token te_token" src="img/image5.png" /></p>
+<blockquote>
+<p>⚠️ Make sure your HEC endpoint uses a <strong>valid TLS certificate</strong> — self-signed certificates are not supported by the ThousandEyes App.</p>
+</blockquote>
+<p>You can test your HEC connection with a curl command like this:</p>
+<pre><code class="language-curl">curl -k https://&lt;HEC_ENDPOINT&gt;&gt;:&lt;HEC_PORT&gt;/services/collector/event \
+  -H &quot;Authorization: Splunk &lt;HEC_TOKEN&gt;&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;event&quot;: &quot;HEC connectivity test&quot;, &quot;sourcetype&quot;: &quot;hec_test&quot;}'
+</code></pre>
+<ul>
+<li>Examples</li>
+<li>HEC_ENDPOINT: https://i-098ba594a9f46aab8.splunk.show</li>
+<li>HEC_PORT: 8088 </li>
+</ul>
+<hr />
+<h2 id="4-inputs-configuration">4. Inputs Configuration</h2>
+<p>Now that the connection, token, and index are ready, configure the data inputs that will pull data from ThousandEyes.</p>
+<ol>
+<li>Go to <strong>Apps → Cisco ThousandEyes App for Splunk</strong></li>
+<li>Click <strong>Inputs</strong>, then <strong>Create New Input</strong></li>
+<li>
+<p>Create <strong>three inputs</strong> as shown below:</p>
+</li>
+<li>
+<p>Alerts Stream</p>
+</li>
+<li>Tests Streams Metrics</li>
+<li>Tests Streams Traces</li>
+</ol>
+<h3 id="inputs">Inputs</h3>
+<p>For each input, fill in the following:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Name</strong></td>
+<td>Teste name + your id</td>
+</tr>
+<tr>
+<td><strong>Account</strong></td>
+<td>Select your ThousandEyes user</td>
+</tr>
+<tr>
+<td><strong>Account Group</strong></td>
+<td>Select your Account Group</td>
+</tr>
+<tr>
+<td><strong>HEC Target</strong></td>
+<td><code>https://&lt;your-splunk&gt;:&lt;hec-port&gt;/services/collector/event</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="alerts-streams">Alerts Streams</h2>
+<blockquote>
+<blockquote>
+<p>Name it TE_ALERTS_YOURID  EXAMPLE: TE_ALERTS_LEDEOLIV</p>
+</blockquote>
+</blockquote>
+<p><img alt="Create three ThousandEyes data inputs" src="img/image6.png" /></p>
+<blockquote>
+<p>Make sure to add the test that was created previously by you <code>page-load-alert-online-boutique</code>. The name should be something like ....-page-load-alert-online-boutique</p>
+</blockquote>
+<h2 id="tests-streams-metrics">Tests Streams Metrics</h2>
+<blockquote>
+<blockquote>
+<p>Name it TE_METRICS_YOURID  EXAMPLE: TE_METRICS_LEDEOLIV</p>
+</blockquote>
+</blockquote>
+<p><img alt="ThousandEyes input — user and account group selection" src="img/image7.png" /></p>
+<h2 id="tests-streams-traces">Tests Streams Traces</h2>
+<blockquote>
+<blockquote>
+<p>Name it TE_TRACES_YOURID  EXAMPLE: TE_TRACES_LEDEOLIV</p>
+</blockquote>
+</blockquote>
+<p><img alt="ThousandEyes input — HEC target configuration" src="img/image8.png" /></p>
+<ol>
+<li>After creating all three inputs, verify that they are all <strong>Active</strong>:</li>
+</ol>
+<p><img alt="All three ThousandEyes inputs active" src="img/image9.png" /></p>
+<hr />
+<h2 id="5-updating-macros">5. Updating Macros</h2>
+<blockquote>
+<p>⚠️ <strong>This step is critical.</strong> The app ships with macros that default to <code>index=*</code>. For performance and best practices, you must update them to use <code>index=te_index</code>.</p>
+</blockquote>
+<h3 id="which-macros-to-update">Which Macros to Update</h3>
+<p>Search for all macros below <em>except</em> summariesolny and change <code>index=*</code> to <code>index=te_index</code>:</p>
+<p><img alt="List of macros to update from index=* to index=te_index" src="img/image10.png" /></p>
+<p>Also update the macro named <strong><code>itsi_cp_thousandeyes_index</code></strong>.</p>
+<h3 id="how-to-edit-a-macro">How to Edit a Macro</h3>
+<ol>
+<li>In Splunk, go to <strong>Settings → Advanced Search → Search Macros</strong></li>
+<li>Filter by the macro name</li>
+</ol>
+<p><img alt="Search for macro by name" src="img/image11.png" /></p>
+<ol>
+<li>Click the macro, edit the definition, and <strong>Save</strong></li>
+</ol>
+<p><img alt="Edit and save the macro definition" src="img/image12.png" /></p>
+<blockquote>
+<p>✅ After this step, all ThousandEyes searches will be properly scoped to <code>te_index</code>.</p>
+</blockquote>
+<hr />
+<p><a href="./01-installation.html">← Back: Installation</a> | <a href="./03-validation.html">Next: Validation →</a></p></article>
+    </main>
+  </div>
+</body>
+</html>
